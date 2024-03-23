@@ -71,12 +71,14 @@ class _VideoItemState extends State<VideoItem> {
                               FutureBuilder(
                                   future: ApiService.getThumnial(widget.ytId),
                                   builder: (context, snapshot) {
-                                    return FadeInImage.assetNetwork(
-                                      fit: BoxFit.contain,
-                                      placeholder: 'asset/placeholder.png',
-                                      image: snapshot.data ??
-                                          "https://i.ytimg.com/vi/ERLEeGVWYxg/mqdefault.jpg",
-                                    );
+                                    return FadeInImage(
+                                        fit: BoxFit.fitWidth,
+                                        placeholder:
+                                            AssetImage('asset/place.png'),
+                                        image: snapshot.data != null
+                                            ? NetworkImage(snapshot.data!)
+                                            : (AssetImage('asset/place.png')
+                                                as ImageProvider));
                                   }),
                               Icon(
                                 Icons.play_circle_outline_rounded,
@@ -89,7 +91,7 @@ class _VideoItemState extends State<VideoItem> {
                       child: Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: Text(
-                            "Tembung Mocopat Gundam ASDASDSAD",
+                            "Tembung Mocopat Guru Gatra",
                             maxLines: 2,
                             style: TextStyle(
                               fontSize: 12,
@@ -110,7 +112,7 @@ class _VideoItemState extends State<VideoItem> {
               children: [
                 Container(
                     padding:
-                        EdgeInsets.only(top: 2, bottom: 2, right: 5, left: 5),
+                        EdgeInsets.only(top: 2, bottom: 2, right: 3, left: 3),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
                         color: widget.color),
@@ -118,7 +120,7 @@ class _VideoItemState extends State<VideoItem> {
                       "Bab ${widget.bab}",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12,
+                          fontSize: 10,
                           fontWeight: FontWeight.w700),
                     )),
               ],

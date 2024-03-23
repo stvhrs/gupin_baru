@@ -46,6 +46,8 @@ dependencies:
   appinio_swiper: ^2.1.0
   flutter_carousel_widget: ^2.2.0
   timeline_tile: ^2.0.0
+  animated_bottom_navigation_bar: ^1.3.3
+  animate_do: ^3.3.4
 
  
 
@@ -77,7 +79,7 @@ flutter:
     - asset/Icon/
    
     - asset/Halaman_HET/
-    - asset/Halaman_Latihan_PAS&PTS/
+ 
     - asset/Halaman_Scan/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

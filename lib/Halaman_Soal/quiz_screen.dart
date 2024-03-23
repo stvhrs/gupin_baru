@@ -1,16 +1,17 @@
 import 'dart:async';
 
 
-import 'package:Bupin/Soal/results_screen.dart';
+import 'package:Bupin/Halaman_Soal/results_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class QuizScreen extends StatefulWidget {
   final String topicType;
   final List<dynamic> questionlenght;
+  final Color color;
   final dynamic optionsList;
   const QuizScreen(
-      {super.key,
+      {super.key,required this.color,
       required this.questionlenght,
       required this.optionsList,
       required this.topicType});
@@ -90,8 +91,8 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const Color bgColor3 = Color(0xFF5170FD);
-    const Color bgColor = Color(0xFF4993FA);
+    Color bgColor3 = widget.color;
+     Color bgColor = widget.color.withOpacity(0.5);
 
     return WillPopScope(
       onWillPop: () {
@@ -149,9 +150,9 @@ class _QuizScreenState extends State<QuizScreen> {
     builder: (context, value, _) => LinearProgressIndicator(
                             minHeight: 20,
                             value:value,
-                            backgroundColor: Colors.blue.shade100,
-                            color: Colors.blueGrey,
-                            valueColor: const AlwaysStoppedAnimation(bgColor),
+                            backgroundColor:Colors.white,
+                           
+                            valueColor:  AlwaysStoppedAnimation(bgColor),
                           )),
                         ),
                       ),
@@ -160,7 +161,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 12, left: 10, right: 10),
-                  width: MediaQuery.of(context).size.width * 0.90,
+                  width: MediaQuery.of(context).size.width ,
                   height: MediaQuery.of(context).size.height * 0.75,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
@@ -333,11 +334,11 @@ class _QuizScreenState extends State<QuizScreen> {
 
   ElevatedButton buildElevatedButton() {
     //  const Color bgColor3 = Color(0xFF5170FD);
-    const Color cardColor = Color(0xFF4993FA);
+
 
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(cardColor),
+        backgroundColor: MaterialStateProperty.all(widget.color),
         fixedSize: MaterialStateProperty.all(
           Size(MediaQuery.sizeOf(context).width * 0.80, 40),
         ),
@@ -371,8 +372,8 @@ class _QuizScreenState extends State<QuizScreen> {
       },
       child: Text(
         _questionNumber < widget.questionlenght.length
-            ? 'Next Question'
-            : 'Result',
+            ? 'Selanjutnya'
+            : 'Lihat Hasil',
         style: Theme.of(context).textTheme.bodySmall!.copyWith(
               color: Colors.white,
               fontSize: 16,

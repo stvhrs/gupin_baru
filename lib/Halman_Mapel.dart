@@ -1,5 +1,11 @@
+import 'dart:math';
+
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/Halaman_Mapel/Video_Item.dart';
+
+import 'package:Bupin/Halaman_Soal/quiz_screen.dart';
+import 'package:Bupin/models/soal.dart';
+import 'package:Bupin/styles/PageTransitionTheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -14,6 +20,37 @@ class HalamanMapel extends StatefulWidget {
   State<HalamanMapel> createState() => _HalamanMapelState();
 }
 
+Map<dynamic, dynamic> getRandomQuestionsAndOptions(
+  List<dynamic> allQuestions,
+  int count,
+) {
+  final randomQuestions = <dynamic>[];
+  final randomOptions = <dynamic>[];
+  final random = Random();
+
+  if (count >= allQuestions.length) {
+    count = allQuestions.length;
+  }
+
+  while (randomQuestions.length < count) {
+    final randomIndex = random.nextInt(allQuestions.length);
+    final selectedQuestion = allQuestions[randomIndex];
+
+    if (!randomQuestions.contains(selectedQuestion)) {
+      randomQuestions.add(selectedQuestion);
+      randomOptions.add(selectedQuestion.options);
+    }
+  }
+
+  return Map.fromIterables(randomQuestions, randomOptions);
+}
+
+Map<dynamic, dynamic> randomQuestionsMap = getRandomQuestionsAndOptions(
+    widgetQuestionsList, widgetQuestionsList.length);
+
+List<dynamic> randomQuestions = randomQuestionsMap.keys.toList();
+dynamic randomOptions = randomQuestionsMap.values.toList();
+
 class _HalamanMapelState extends State<HalamanMapel> {
   bool _stretch = true;
   @override
@@ -22,7 +59,6 @@ class _HalamanMapelState extends State<HalamanMapel> {
       backgroundColor: widget.color,
       body: SafeArea(
         child: CustomScrollView(
-        
           slivers: <Widget>[
             SliverAppBar(
               automaticallyImplyLeading: false,
@@ -111,50 +147,120 @@ class _HalamanMapelState extends State<HalamanMapel> {
               ),
             ),
             SliverList(
-              delegate: SliverChildBuilderDelegate( 
+              delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return Container(
-                    padding: EdgeInsets.all(15),
-                    color: Color.fromARGB(255, 235, 240, 242),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              "Persiapan Ujian",
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                            Icon(
-                              Icons.local_fire_department_sharp,
-                              color: Colors.red,size: 18,
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5, bottom: 15),
-                          child: Row(
+                  return
+                    Container(
+                      padding: EdgeInsets.only(top: 15,left: 15,right: 15),
+                       color: Color.fromARGB(255, 235, 240, 242),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: 8, bottom: 8, left: 8, right: 8),
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: widget.color.withOpacity(0.1),
-                                        spreadRadius: 0.5,
-                                        blurRadius: 6,
-                                        offset: Offset(
-                                            0, 0), // changes position of shadow
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(3),
-                                    color: Colors.white),
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Image.asset("asset/uts.png",
+                              Text(
+                                "Persiapan Ujian",
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              Icon(
+                                Icons.local_fire_department_sharp,
+                                color: Colors.red,
+                                size: 18,
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5, bottom: 15),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      top: 8, bottom: 8, left: 8, right: 8),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: widget.color.withOpacity(0.1),
+                                          spreadRadius: 0.5,
+                                          blurRadius: 6,
+                                          offset: Offset(0,
+                                              0), // changes position of shadow
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(3),
+                                      color: Colors.white),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(CustomRoute(
+                                        builder: (context) => QuizScreen(
+                                            color: widget.color,
+                                            questionlenght: randomQuestions,
+                                            optionsList: randomOptions,
+                                            topicType: widget.judul),
+                                      ));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 5),
+                                          child: Image.asset("asset/uts.png",
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.08,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.08),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 5, right: 5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "PAT",
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                              Text("Berbasis CBT",
+                                                  style:
+                                                      TextStyle(fontSize: 10)),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      top: 8, bottom: 8, left: 8, right: 8),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: widget.color.withOpacity(0.1),
+                                          spreadRadius: 0.5,
+                                          blurRadius: 6,
+                                          offset: Offset(0,
+                                              0), // changes position of shadow
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(3),
+                                      color: Colors.white),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 5),
+                                        child: Image.asset(
+                                          "asset/uas.png",
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -162,129 +268,126 @@ class _HalamanMapelState extends State<HalamanMapel> {
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.08),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 5, right: 5),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "UTS",
-                                            style: TextStyle(
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          Text("Berbasis CBT",
-                                              style: TextStyle(fontSize: 10)),
-                                        ],
+                                              0.08,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Spacer(),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: 8, bottom: 8, left: 8, right: 8),
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: widget.color.withOpacity(0.1),
-                                        spreadRadius: 0.5,
-                                        blurRadius: 6,
-                                        offset: Offset(
-                                            0, 0), // changes position of shadow
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 5, right: 5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "PAS",
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            Text("Berbasis CBT",
+                                                style: TextStyle(fontSize: 10)),
+                                          ],
+                                        ),
                                       ),
                                     ],
-                                    borderRadius: BorderRadius.circular(3),
-                                    color: Colors.white),
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Image.asset(
-                                        "asset/uas.png",
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.08,
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.08,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 5, right: 5),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "UAS",
-                                            style: TextStyle(
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          Text("Berbasis CBT",
-                                              style: TextStyle(fontSize: 10)),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Spacer(),
-                              Spacer(),
-                              Spacer(),
-                              Spacer()
-                            ],
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 15),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Divider(
-                                    color: widget.color.withOpacity(0.8),
-                                    thickness: 2,
-                                    indent: 5,
-                                    endIndent: 10,
                                   ),
                                 ),
-                                Text(
-                                  "Video Pembelajaran",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,fontSize: 18,
-                                      color: widget.color.withOpacity(0.8)),
-                                ),
-                                Expanded(
-                                  child: Divider(
-                                    color: widget.color.withOpacity(0.8),
-                                    thickness: 2,
-                                    indent: 10,
-                                    endIndent: 5,
-                                  ),
-                                ),
+                                Spacer(),
+                                Spacer(),
+                                Spacer(),
+                                Spacer()
                               ],
                             ),
                           ),
+                          Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 5, bottom: 15),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Divider(
+                                      color: widget.color.withOpacity(0.8),
+                                      thickness: 2,
+                                      indent: 5,
+                                      endIndent: 10,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Video Pembelajaran",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 18,
+                                        color: widget.color.withOpacity(0.8)),
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      color: widget.color.withOpacity(0.8),
+                                      thickness: 2,
+                                      indent: 10,
+                                      endIndent: 5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ), Stack(clipBehavior: Clip.none,children: [
+                    Positioned.fill(
+                        child: Container(
+                      color: Color.fromARGB(255, 237, 240, 247),
+                    )),
+                    Positioned.fill(
+                     
+                        child: Image.asset(
+                          "asset/bg mapel.png",
+                          repeat: ImageRepeat.repeatY,color: widget.color.withOpacity(0.1),
                         ),
-                        ...List.generate(
-                            10,
-                            (index) => VideoItem(
-                                  "25_TSBl5Y_s",
-                                  widget.color,
-                                  index,
-                                ))
-                      ],
+                      
+                    ), Positioned.fill(
+                      child: ColorFiltered(
+                        colorFilter: ColorFilter.matrix(<double>[
+                          0.2126,
+                          0.7152,
+                          0.0722,
+                          0,
+                          0,
+                          0.2126,
+                          0.7152,
+                          0.0722,
+                          0,
+                          0,
+                          0.2126,
+                          0.7152,
+                          0.0722,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          1,
+                          0,
+                        ]),
+                        child: Opacity(opacity: 0.15,
+                          child: Image.asset(
+                            "asset/bg mapel.png",
+                            repeat: ImageRepeat.repeatY,
+                          ),
+                        ),
+                      ),
                     ),
-                  );
+                          Column(children: 
+                          List.generate(
+                              10,
+                              (index) => VideoItem(
+                                    "25_TSBl5Y_s",
+                                    widget.color,
+                                    index,
+                                  )))
+                        ],
+                      )]),
+                    );
+                 
                 },
                 childCount: 1,
               ),

@@ -1,5 +1,5 @@
 
-import 'package:Bupin/Soal/results_card.dart';
+import 'package:Bupin/Halaman_Soal/results_card.dart';
 import 'package:flutter/material.dart';
 
 class ResultsScreen extends StatelessWidget {

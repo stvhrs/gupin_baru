@@ -203,8 +203,7 @@ class HalamanVideoState extends State<HalamanVideo>
                                                                 context)
                                                             .size
                                                             .width,
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
+                                                        color: widget.color,
                                                       ),
                                                 const Padding(
                                                   padding: EdgeInsets.only(

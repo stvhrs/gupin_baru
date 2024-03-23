@@ -1,5 +1,5 @@
 
-import 'package:Bupin/dotted_lines.dart';
+import 'package:Bupin/Halaman_Soal/dotted_lines.dart';
 import 'package:flutter/material.dart';
 
 class ResultsCard extends StatelessWidget {

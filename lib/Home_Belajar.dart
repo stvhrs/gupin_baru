@@ -29,49 +29,57 @@ class _HalmanScanState extends State<HalmanScan> {
     Image.asset("asset/1.png"),
   ];
 
-  double height = 0;
   @override
   Widget build(BuildContext context) {
-    log("scan");
-    height = MediaQuery.of(context).size.height;
-
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          shadowColor: Colors.black,
-          leadingWidth: MediaQuery.of(context).size.width * 0.3,
-          leading: Image.asset(
-            "asset/gupin.png",
-          ),
-          // backgroundColor: const Color.fromARGB(255, 48, 47, 114),
+        child: Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        shadowColor: Colors.black,
+        leadingWidth: MediaQuery.of(context).size.width * 0.3,
+        leading: Image.asset(
+          "asset/gupin.png",
         ),
-        body: Container(
-          color: Colors.white,
-          child: ListView(padding: EdgeInsets.zero, children: [
-            FlutterCarousel(
-              options: CarouselOptions(
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 7),
-                disableCenter: true,
-                height: MediaQuery.of(context).size.width * 6 / 16,
-                indicatorMargin: 12.0,
-                viewportFraction: 1,
-                enableInfiniteScroll: true,
-              ),
-              items: sliders,
+        // backgroundColor: const Color.fromARGB(255, 48, 47, 114),
+      ),
+      body: Container(
+        child:Column(children: [
+          FlutterCarousel(
+            options: CarouselOptions(
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 7),
+              disableCenter: true,
+              height: MediaQuery.of(context).size.width * 6 / 16,
+              indicatorMargin: 12.0,
+              viewportFraction: 1,
+              enableInfiniteScroll: true,
             ),
-            Container(
+            items: sliders,
+          ),
+          Container(
               margin: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              decoration:
+                  BoxDecoration( boxShadow: [
+                                        BoxShadow(
+                                          color:Theme.of(context) .primaryColor.withOpacity(0.1),
+                                          spreadRadius: 0.5,
+                                          blurRadius: 6,
+                                          offset: Offset(0,
+                                              0), // changes position of shadow
+                                        ),
+                                      ],color: Colors.white,borderRadius: BorderRadius.circular(10)),
               child: Container(
                 padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      "Pelajaran SMA XI",
-                      style: TextStyle(fontWeight: FontWeight.w700,fontSize: 16),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        "Pelajaran SMA XI",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 17),
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,63 +153,13 @@ class _HalmanScanState extends State<HalmanScan> {
                             judul: "Matematika"),
                       ],
                     ),
-                  
                   ],
                 ),
-              ),
-            ),  Divider(
-                      height: 2,
-                      thickness: 5,
-                      color: Theme.of(context).primaryColor.withOpacity(0.6),
-                    ),
+              )),
          
-                 
-          ]),
-        ),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniCenterDocked,
-        floatingActionButton: Stack(alignment: Alignment.center, children: [
-          InkWell(
-            onTap: () {
-              Navigator.of(context).push(CustomRoute(
-                builder: (context) => const QRViewExample(false),
-              ));
-            },
-            child: Container(width:MediaQuery.of(context).size.width * 0.15 ,height: MediaQuery.of(context).size.width  * 0.15,
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.white.withOpacity(0.2),
-                      spreadRadius: 5,
-                      blurRadius: 20,
-                      offset: const Offset(0.5, 0.5),
-                    ),
-                  ],
-                ),
-                child:  Icon(
-                  Icons.qr_code_scanner_rounded,
-                  color: Colors.white,
-                  size: MediaQuery.of(context).size.width  * 0.1 ,
-                )),
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width  * 0.3,
-            height: MediaQuery.of(context).size.width  * 0.3,
-            child: const ScanningEffect(
-              enableBorder: true,
-              scanningColor: Color.fromRGBO(236, 180, 84, 1),
-              delay: Duration(milliseconds: 200),
-              duration: Duration(seconds: 2),
-              child: SizedBox(),
-            ),
-          ),
-        ]))
-    );
+        ]),
+      ),
+    ));
   }
 }
 
@@ -213,47 +171,49 @@ class IconMapel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 8, left: 5, right: 5, bottom: 1),
-          width: MediaQuery.of(context).size.width * 0.15,
-          height: MediaQuery.of(context).size.width * 0.15,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).push(CustomRoute(
-                builder: (context) =>
-                    HalamanMapel(color: color, judul: judul, image: image),
-              ));
-            },
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Opacity(
-                    opacity: 1,
-                    child: Image.asset(
-                      "asset/Icon/Bg Icon2.png",
-                      color: color,
-                    )),
-                Opacity(
-                    opacity: 0.3, child: Image.asset("asset/Icon/Bg t.png")),
-                Hero(
-                    tag: judul,
-                    child: Image.asset(image,
-                        width: MediaQuery.of(context).size.width * 0.11,
-                        height: MediaQuery.of(context).size.width * 0.11)),
-              ],
+    return Container(margin: EdgeInsets.symmetric(vertical: 4),
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 8, left: 5, right: 5, bottom: 1),
+            width: MediaQuery.of(context).size.width * 0.15,
+            height: MediaQuery.of(context).size.width * 0.15,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(CustomRoute(
+                  builder: (context) =>
+                      HalamanMapel(color: color, judul: judul, image: image),
+                ));
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Opacity(
+                      opacity: 1,
+                      child:  Image.asset(
+                        "asset/Icon/Bg Icon2.png",
+                        color: color,
+                      )),
+                  Opacity(
+                      opacity: 0.3, child:  Image.asset("asset/Icon/Bg t.png")),
+                  Hero(
+                      tag: judul,
+                      child: Image.asset(image,
+                          width: MediaQuery.of(context).size.width * 0.10,
+                          height: MediaQuery.of(context).size.width * 0.10)),
+                ],
+              ),
             ),
           ),
-        ),
-        Text(
-          judul,
-          style: TextStyle(fontSize: 12),
-        )
-      ],
+          Text(
+            judul,
+            style: TextStyle(fontSize: 12),
+          )
+        ],
+      ),
     );
   }
 }
