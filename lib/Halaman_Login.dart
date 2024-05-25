@@ -32,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
         height: MediaQuery.of(context).size.height,
         width: size.width,
       ),
-     
       Image.asset(
         "asset/4.png",
         width: size.width,
@@ -56,23 +55,27 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
         body: Column(
-          children: [SizedBox(height: size.height*0.35,),
+          children: [
+            SizedBox(
+              height: size.height * 0.35,
+            ),
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(20)),
-              child: Stack(
-                children: [ Image.asset(
-        "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-        repeat: ImageRepeat.repeatY,
-        color: Theme.of(context).primaryColor,
-      ),
+              child: Stack(clipBehavior: Clip.none,
+                children: [
+                  Image.asset(
+                    "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
+                    repeat: ImageRepeat.repeatY,
+                    color: Theme.of(context).primaryColor,
+                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
                           alignment: Alignment.centerLeft,
-                          margin:
-                              EdgeInsets.only(bottom: 10, top: 20, left: 40, right: 40),
+                          margin: EdgeInsets.only(
+                              bottom: 10, top: 20, left: 40, right: 40),
                           child: Text(
                             textAlign: TextAlign.left,
                             "Masukan akun",
@@ -83,7 +86,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           )),
                       Container(
                         alignment: Alignment.center,
-                        margin: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 5),
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           onChanged: (v) {
@@ -102,7 +106,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Container(
                         alignment: Alignment.center,
-                        margin: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 5),
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           onChanged: (value) {
@@ -137,11 +142,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: _btnController1,
                         onPressed: () async {
                           _btnController1.start();
-                          bool login =
-                              await ApiService().login(kodesekolah.text, username.text);
+                          bool login = await ApiService()
+                              .login(kodesekolah.text, username.text);
                           if (login) {
-                            
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
                               builder: (context) => Home(),
                             ));
                           } else {

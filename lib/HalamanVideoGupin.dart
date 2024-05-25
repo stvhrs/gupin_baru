@@ -180,14 +180,11 @@ class HalamanVideoState extends State<GupinVideo>
                                               DeviceOrientation.landscapeLeft
                                             ]);
                                             if (controller!.isFullScreen) {
-
-                                             
-                                            } else {  
-                                              
-                                              SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-                                              
-                                              
-                                              }
+                                            } else {
+                                              SystemChrome
+                                                  .setEnabledSystemUIMode(
+                                                      SystemUiMode.leanBack);
+                                            }
                                           }
 
                                           return Future.delayed(
@@ -196,15 +193,13 @@ class HalamanVideoState extends State<GupinVideo>
                                           return Future.delayed(
                                             Duration(microseconds: 0),
                                             () {
-  if (controller!.isFullScreen) {
-
-                                             
-                                            } else {  
-                                              
-                                              SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-                                              
-                                              
-                                              }                                            },
+                                              if (controller!.isFullScreen) {
+                                              } else {
+                                                SystemChrome
+                                                    .setEnabledSystemUIMode(
+                                                        SystemUiMode.leanBack);
+                                              }
+                                            },
                                           );
                                         }
                                       },

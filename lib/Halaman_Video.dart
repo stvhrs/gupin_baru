@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pod_player/pod_player.dart';
 
-///
+
 class HalamanVideo extends StatefulWidget {
   final String link;
 
