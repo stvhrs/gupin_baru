@@ -386,7 +386,7 @@ element["thumbnail"]=              await getThumnial(element["link_youtube"] );
     final dio = Dio();
     int status = ptsOrpas ? 1 : 2;
     final response = await dio.get(
-        "https://bupin.id/api/api-tryout-new.php?kelas=${user!.kelas}&mapel=$idMapel&status=$status");
+        "https://bupin.id/api/api-tryout-new.php?kelas=${user!.kelas}&mapel=$idMapel&status=$status",);
 
     if (response.data == null) {
       return [];

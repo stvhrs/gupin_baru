@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
         options: CarouselOptions(
           autoPlay: true,
           autoPlayCurve: Curves.easeInToLinear,
-          autoPlayInterval: const Duration(seconds: 8),
+          autoPlayInterval: const Duration(seconds: 3),
           disableCenter: true,
           height: MediaQuery.of(context).size.width,
           indicatorMargin: 12.0,
@@ -54,10 +54,10 @@ class _LoginScreenState extends State<LoginScreen> {
       Scaffold(
         backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
-        body: Column(
+        body: ListView(
           children: [
             SizedBox(
-              height: size.height * 0.35,
+              height: size.height * 0.3,
             ),
             Container(
               decoration: BoxDecoration(

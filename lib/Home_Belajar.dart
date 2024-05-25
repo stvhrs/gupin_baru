@@ -121,6 +121,7 @@ class HalamanBelajar extends StatelessWidget {
                               
                                 width: MediaQuery.of(context).size.width,
                               ),
+                              Positioned.fill(child: Image.asset("asset/Halaman_Scan/Doodle Halaman Scan@4x.png",repeat: ImageRepeat.repeatY,color: Theme.of(context).primaryColor,)),
                   Container(
                       decoration: BoxDecoration(
                         color: Colors.transparent,
@@ -136,7 +137,7 @@ class HalamanBelajar extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: Text(
-                                  "Pelajaran SMP VII ",
+                                  "Pelajaran "+ ApiService.user!.jenjang,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w900,
                                       fontSize: 15,
@@ -182,7 +183,7 @@ class HalamanBelajar extends StatelessWidget {
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
+                                horizontal: 20, vertical: 10),
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image.asset("asset/tutor.png")),
@@ -195,7 +196,7 @@ class HalamanBelajar extends StatelessWidget {
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
+                                horizontal: 20, vertical: 10),
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image.asset("asset/beli.png")),
