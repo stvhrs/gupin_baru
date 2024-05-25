@@ -11,7 +11,10 @@ import 'package:pod_player/pod_player.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //PodVideoPlayer.enableLogs = true;
-SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

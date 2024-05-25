@@ -14,7 +14,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert' show utf8;
 
 const List<String> list = <String>[
   'SD/MI  I',
@@ -394,7 +393,7 @@ element["thumbnail"]=              await getThumnial(element["link_youtube"] );
     } else {
       List<WidgetQuestion> tempListTo = [];
 
-      for (var element in jsonDecode(utf8.decode( response.data["results"].toString().codeUnits)) ) {
+      for (var element in  response.data["results"]) {
          tempListTo.add(WidgetQuestion.fromMap(element));
       }
 

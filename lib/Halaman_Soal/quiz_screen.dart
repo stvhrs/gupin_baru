@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert'show jsonDecode, utf8;
 
 import 'package:Bupin/Halaman_Soal/results_screen.dart';
 import 'package:Bupin/models/soal.dart';
@@ -276,7 +277,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                 )
                                               : SizedBox(),
                                           Text(
-                                            myquestions.text,
+                                          utf8.decode( myquestions.text.codeUnits) ,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge!
