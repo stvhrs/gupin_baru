@@ -52,7 +52,7 @@ class HalamanVideoState extends State<GupinVideo>
     controller = await PodPlayerController(
       playVideoFrom: PlayVideoFrom.youtube(widget.link),
       podPlayerConfig: const PodPlayerConfig(
-        autoPlay: true,
+        autoPlay: true,videoQualityPriority: [720,360]
       ),
     )
       ..initialise();
@@ -180,7 +180,7 @@ class HalamanVideoState extends State<GupinVideo>
                                               DeviceOrientation.landscapeLeft
                                             ]);
                                             if (controller!.isFullScreen) {
-                                            } else {
+                                            } else {  
                                               SystemChrome
                                                   .setEnabledSystemUIMode(
                                                       SystemUiMode.leanBack);

@@ -67,13 +67,13 @@ class _QuizScreenState extends State<QuizScreen> {
   void navigateToNewScreen() {
     if (_questionNumber < widget.questionlenght.length) {
       _controller.nextPage(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.fastOutSlowIn,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.linear,
       );
-      setState(() {
+      // setState(() {
         _questionNumber++;
         isLocked = false;
-      });
+      // });
       _resetQuestionLocks();
       startTimerOnQuestions();
     } else {
@@ -230,14 +230,14 @@ class _QuizScreenState extends State<QuizScreen> {
                              Container(color: Colors.white,padding: EdgeInsets.symmetric(horizontal: 8),
                                child: PageView.builder(
                                   controller: _controller,
-                                  physics: const NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),pageSnapping: false,
                                   itemCount: widget.questionlenght.length,
                                   onPageChanged: (value) {
-                                    setState(() {
+                                    // setState(() {
                                       _questionNumber = value + 1;
                                       isLocked = false;
                                       _resetQuestionLocks();
-                                    });
+                                    // });
                                   },
                                   itemBuilder: (context, index) {
                                     final WidgetQuestion myquestions =
