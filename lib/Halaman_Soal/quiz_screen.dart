@@ -67,7 +67,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void navigateToNewScreen() {
     if (_questionNumber < widget.questionlenght.length) {
       _controller.nextPage(
-        duration: const Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 800),
         curve: Curves.linear,
       );
       // setState(() {
