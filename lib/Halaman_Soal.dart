@@ -94,7 +94,7 @@ class _HalamanSoalState extends State<HalamanSoal>
                         borderRadius: BorderRadius.circular(50)),
                     child: GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(CustomRoute(
+                              Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => widget.jenjang.contains("SD/MI")
                                     ? HalamanLaporan(widget.url.replaceAll(
                                         "https://cbtsd.bupin.id/login.php?",

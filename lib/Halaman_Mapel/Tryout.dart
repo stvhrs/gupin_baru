@@ -1,5 +1,6 @@
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/HalamanVideoGupin.dart';
+import 'package:Bupin/Halaman_Soal/quiz_screen.dart';
 import 'package:Bupin/Halaman_Video.dart';
 import 'package:Bupin/models/Video.dart';
 import 'package:Bupin/styles/PageTransitionTheme.dart';
@@ -10,18 +11,19 @@ import 'package:flutter/material.dart';
 
 import 'package:timeline_tile/timeline_tile.dart';
 
-class VideoItem extends StatefulWidget {
-  final Video video;
-
+class TryoutItem extends StatefulWidget {
   final String judul;
   final Color color;
-  VideoItem(this.video, this.judul, this.color);
+  final List<dynamic> questionlenght;
+
+  final dynamic optionsList;
+  TryoutItem(this.judul, this.color, this.questionlenght, this.optionsList);
 
   @override
-  State<VideoItem> createState() => _VideoItemState();
+  State<TryoutItem> createState() => _TryoutItemState();
 }
 
-class _VideoItemState extends State<VideoItem> {
+class _TryoutItemState extends State<TryoutItem> {
   @override
   Widget build(BuildContext context) {
     return TimelineTile(
@@ -35,17 +37,15 @@ class _VideoItemState extends State<VideoItem> {
         clipBehavior: Clip.none,
         children: [
           InkWell(
-            onTap: widget.judul == ""
-                ? () {}
-                : () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => GupinVideo(
-                        widget.video.linkVideo!,
-                        widget.color,
-                        widget.judul.toTitleCase(),
-                      ),
-                    ));
-                  },
+            onTap: widget.judul==""?null: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => QuizScreen(
+                    color: widget.color,
+                    questionlenght: widget.questionlenght,
+                    optionsList: widget.optionsList,
+                    topicType: widget.judul),
+              ));
+            },
             child: Container(
               margin: EdgeInsets.only(bottom: 20),
               height: MediaQuery.of(context).size.width * 0.17,
@@ -62,30 +62,14 @@ class _VideoItemState extends State<VideoItem> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(3.0),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              widget.judul == "" ?Image.asset("asset/loading.png",color: widget.color,): FadeInImage.assetNetwork(
-                                placeholder: "asset/loading.png",
-                                placeholderColor: widget.color,
-                                image: widget.video.thumbnail,
-                              ),
-                            ],
-                          )),
-                    ),
                     Expanded(
                       child: Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child:  AnimatedOpacity(  duration: const Duration(milliseconds: 500),
-                opacity: widget.judul == ""  
-                    ? 0
-                    :  1.0,
+                          padding: const EdgeInsets.only(left: 16),
+                          child: AnimatedOpacity(
+                            duration: const Duration(milliseconds: 500),
+                            opacity: widget.judul == "" ? 0 : 1.0,
                             child: Text(
-                              widget.judul == "" ? "" : widget.judul.toTitleCase(),
+                              widget.judul.toTitleCase(),
                               maxLines: 2,
                               style: TextStyle(
                                 fontSize: 12,

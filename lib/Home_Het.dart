@@ -1,3 +1,4 @@
+import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/models/Het.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,8 @@ class HalmanHet extends StatefulWidget {
   State<HalmanHet> createState() => _HalmanHetState();
 }
 
-class _HalmanHetState extends State<HalmanHet> {
+class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixin{
+  
   List<Het> listHET = [];
 
   Future<void> fetchApi() async {
@@ -81,9 +83,12 @@ class _HalmanHetState extends State<HalmanHet> {
     }
   }
 
-  String dropdownValue = list.first;
+  String dropdownValue = list[int.parse(ApiService.user!.kelas) -1
+  
+  ];
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     log("het");
     return Column(
       children: [
@@ -270,4 +275,8 @@ class _HalmanHetState extends State<HalmanHet> {
       ],
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

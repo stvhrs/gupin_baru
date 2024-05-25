@@ -85,7 +85,7 @@ class _HalamanBannerState extends State<HalamanBanner> {
                                                     snapshot.data!["link"]));
                                               } else {
                                                 Navigator.of(context)
-                                                    .push(CustomRoute(
+                                                    .push(MaterialPageRoute(
                                                   builder: (context) =>
                                                       HalamanWebview(snapshot
                                                           .data!["link"]),

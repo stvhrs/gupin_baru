@@ -1,4 +1,3 @@
-
 import 'package:Bupin/Halaman_Soal/dotted_lines.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +13,7 @@ class ResultsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color bgColor3 = Color(0xFF5170FD);
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.888,
       height: MediaQuery.of(context).size.height * 0.568,
@@ -34,37 +33,41 @@ class ResultsCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Center(
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          children: [
-                            for (var ii = 0;
-                                ii < "Congratulations!,".length;
-                                ii++) ...[
-                              TextSpan(
-                                text: "Congratulations!,"[ii],
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(fontSize: 12 + ii.toDouble()),
-                              ),
-                            ],
-                            //m'adamfo(Twi) - my friend
-                            TextSpan(
-                              text: "  m'adamfo\n You Scored  \n",
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            TextSpan(
-                              text: "$roundedPercentageScore%",
+                      child: Column(
+                        children: [
+                          Text(
+                            "Skor Anda",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(fontSize: 20),
+                          ),
+
+                          //m'adamfo(Twi) - my friend
+                         
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: roundedPercentageScore >= 75
+                                        ? Colors.green
+                                        : Colors.red.shade800,
+                                    width: 5),
+                               ),
+                            child: Text(
+                              "$roundedPercentageScore",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
                                   .copyWith(
-                                    fontSize: 30,
-                                  ),
+                                      fontSize: 50,
+                                      fontWeight: FontWeight.w900,
+                                      color: roundedPercentageScore >= 75
+                                          ? Colors.green
+                                          : Colors.red.shade800),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -75,42 +78,42 @@ class ResultsCard extends StatelessWidget {
                     flex: 2,
                     child: Center(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 0),
                         child: roundedPercentageScore >= 75
-                            ? Column(
+                            ? Column(mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "You have Earned this Trophy",
+                                    "Mantap !! Latihanmu membuahkan Hasil",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
-                                          fontWeight: FontWeight.w400,
+                                          fontWeight: FontWeight.w600,color: Colors.grey.shade700,fontSize: 17
                                         ),
                                   ),
-                                  Image.asset("assets/bouncy-cup.gif",
+                                  Image.asset("asset/happy.png",
                                       fit: BoxFit.fill,
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.25),
+                                              0.2),
                                 ],
                               )
-                            : Column(
+                            : Column(mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "I know You can do better!!",
+                                    "Sepertinya kamu harus berlatih lagi",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
                                         .copyWith(
-                                          fontWeight: FontWeight.w600,
+                                          fontWeight: FontWeight.w600,color: Colors.grey.shade700,fontSize: 17
                                         ),
                                   ),
-                                  Image.asset("assets/sad.png",
+                                  Image.asset("asset/sad.png",
                                       fit: BoxFit.fill,
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.25),
+                                              0.2),
                                 ],
                               ),
                       ),
@@ -127,7 +130,7 @@ class ResultsCard extends StatelessWidget {
               height: 25,
               width: 25,
               decoration:
-                  const BoxDecoration(color: bgColor3, shape: BoxShape.circle),
+                   BoxDecoration(color: bgColor3, shape: BoxShape.circle),
             ),
           ),
           Positioned(
@@ -137,7 +140,7 @@ class ResultsCard extends StatelessWidget {
               height: 25,
               width: 25,
               decoration:
-                  const BoxDecoration(color: bgColor3, shape: BoxShape.circle),
+                   BoxDecoration(color: bgColor3, shape: BoxShape.circle),
             ),
           ),
         ],
