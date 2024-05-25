@@ -3,7 +3,6 @@ import 'package:Bupin/Halaman_Login.dart';
 import 'package:Bupin/Home.dart';
 import 'package:Bupin/loadingScreen.dart';
 
-import 'package:Bupin/testapi.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

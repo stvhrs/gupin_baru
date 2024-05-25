@@ -4,27 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
-import 'package:provider/provider.dart';
 
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:developer';
 
 import 'package:Bupin/ApiServices.dart';
-import 'package:Bupin/Halaman_Camera.dart';
 import 'package:Bupin/Halaman_Login.dart';
 import 'package:Bupin/Halman_Mapel.dart';
-
-import 'package:Bupin/widgets/scann_aniamtion/scanning_effect.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:tex_text/tex_text.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
-import 'package:shimmer/shimmer.dart';
 
 class IconMapel extends StatelessWidget {
   final Color color;
@@ -95,8 +79,8 @@ class IconMapel extends StatelessWidget {
   }
 }
 
-class HalmanBelajar extends StatelessWidget {
-  const HalmanBelajar({Key? key}) : super(key: key);
+class HalamanBelajar extends StatelessWidget {
+  const HalamanBelajar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

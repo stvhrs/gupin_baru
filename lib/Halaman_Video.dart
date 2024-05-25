@@ -2,17 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
 import 'dart:developer';
+
+
 import 'package:Bupin/Halaman_Laporan_Error.dart';
 import 'package:Bupin/models/Video.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:pod_player/pod_player.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart' as ytx;
-import 'dart:math' as ran;
 
 ///
 class HalamanVideo extends StatefulWidget {
@@ -25,43 +23,30 @@ class HalamanVideo extends StatefulWidget {
 
 class HalamanVideoState extends State<HalamanVideo>
     with TickerProviderStateMixin {
-  late final AnimationController animationcon = AnimationController(
+  late final AnimationController _controller2 = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,
   )..animateTo(1);
   late final Animation<double> _animation = CurvedAnimation(
-    parent: animationcon,
+    parent: _controller2,
     curve: Curves.easeIn,
   );
 
   @override
   void dispose() {
-    // ScaffoldMessenger.of(context).dispose();
-    animationcon.dispose();
-    videoYoutube.dispose();
-    audioYoutube.dispose();
-    linkQrVideo = "";
-    video = null;
-    noInternet = true;
+    _controller2.dispose();
+    controller.dispose();
+
     super.dispose();
   }
 
-  @override
-  void initState() {
-     
-    super.initState();
-  }
-
-  late final PodPlayerController videoYoutube;
+  late final PodPlayerController controller;
 
   String linkQrVideo = "";
   Video? video;
   bool noInternet = true;
 
-
-  late PodPlayerController audioYoutube;
   Future<void> fetchApi() async {
-    log("fetch");
     final dio = Dio();
 
     linkQrVideo = widget.link
@@ -74,86 +59,29 @@ class HalamanVideoState extends State<HalamanVideo>
       return;
     }
 
+    noInternet = false;
     if (response.data[0]["ytid"] == null &&
         response.data[0]["ytidDmp"] == null) {
       return;
     } else {
       video = Video.fromMap(response.data[0]);
-      var yt = ytx.YoutubeExplode();
-
-      var manifest = await yt.videos.streamsClient
-          .getManifest(video!.ytId);
-      audioYoutube = PodPlayerController(
-        playVideoFrom: PlayVideoFrom.network(
-          manifest.audioOnly.first.url.toString(),
-          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-        ),
-        podPlayerConfig: PodPlayerConfig(
-          autoPlay: false,
-        ),
-      )..initialise();
-      videoYoutube = PodPlayerController(
-        playVideoFrom: PlayVideoFrom.network(
-          manifest.videoOnly.bestQuality.url.toString(),
-          videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-        ),
+      controller = PodPlayerController(
+        playVideoFrom: PlayVideoFrom.youtube(video!.ytId!),
         podPlayerConfig: const PodPlayerConfig(
-          autoPlay: false,
+          autoPlay: true,
         ),
       )..initialise();
-
-     videoYoutube.addListener(() {
-        if (videoYoutube.isVideoBuffering || audioYoutube.isVideoBuffering) {
-         
-          videoYoutube.pause();
-          audioYoutube.pause();
-          if (videoYoutube.videoPlayerValue!.position !=
-              audioYoutube.videoPlayerValue!.position) {
-            audioYoutube.videoSeekTo(videoYoutube.videoPlayerValue!.position);
-          }
-            
-          // ScaffoldMessenger.of(context)
-          //     .showSnackBar(SnackBar(content: Text("Loading")));
-        } else {
-         
-          if (!videoYoutube.isVideoBuffering &&
-              !audioYoutube.isVideoBuffering &&
-              !videoYoutube.isVideoPlaying &&
-              !audioYoutube.isVideoPlaying) {
-            videoYoutube.play();
-            audioYoutube.play();
-            //  ScaffoldMessenger.of(context).clearSnackBars();
-          }
-        }
-
-        if (videoYoutube.isVideoPlaying) {
-          audioYoutube.play();
-        } else {
-          audioYoutube.pause();
-         
-          // videoYoutube.removeListener(() {});
-        }
-      });
-      ;
- Timer.periodic(Duration(seconds: 1), (timer) {
-  if(videoYoutube.isInitialised&&videoYoutube.isInitialised){
- audioYoutube.play();
-      videoYoutube.play();
-      timer.cancel();
-
-  }
-     
-    });
-      noInternet = false;
     }
-  
   }
 
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () {
           Navigator.pop(context, false);
-
+          if (noInternet == false) {
+            controller.pause();
+          }
           return Future.value(true);
         },
         child: FutureBuilder<void>(
@@ -166,6 +94,7 @@ class HalamanVideoState extends State<HalamanVideo>
                           padding: const EdgeInsets.all(15.0),
                           child: GestureDetector(
                               onTap: () {
+                                controller.pause();
                                 Navigator.pop(context, false);
                               },
                               child: CircleAvatar(
@@ -242,11 +171,6 @@ class HalamanVideoState extends State<HalamanVideo>
                                     clipBehavior: Clip.none,
                                     alignment: Alignment.center,
                                     children: [
-                                       Transform.scale(scale: 0.1,
-                                         child: PodVideoPlayer(
-                                                                           controller: audioYoutube,
-                                                                         ),
-                                       ),
                                       Container(
                                         color: Colors.black,
                                         width:
@@ -265,11 +189,11 @@ class HalamanVideoState extends State<HalamanVideo>
                                       FadeTransition(
                                         opacity: _animation,
                                         child: PodVideoPlayer(
-                                          controller: videoYoutube,
+                                          controller: controller,
                                           matchFrameAspectRatioToVideo: true,
                                           matchVideoAspectRatioToFrame: true,
                                           onToggleFullScreen: (isFullScreen) {
-                                            if (videoYoutube.videoPlayerValue!
+                                            if (controller.videoPlayerValue!
                                                     .size.aspectRatio ==
                                                 1.7777777777777777) {
                                               if (!isFullScreen) {
@@ -291,7 +215,7 @@ class HalamanVideoState extends State<HalamanVideo>
                                               return Future.delayed(
                                                 Duration(microseconds: 0),
                                                 () {
-                                                  videoYoutube.enableFullScreen();
+                                                  controller.enableFullScreen();
                                                 },
                                               );
                                             }
@@ -299,7 +223,6 @@ class HalamanVideoState extends State<HalamanVideo>
                                         ),
                                       )
                                     ]),
-                               
                                 Image.asset(
                                   "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
                                   width: MediaQuery.of(context).size.width,

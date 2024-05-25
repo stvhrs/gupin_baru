@@ -3,7 +3,6 @@ import 'package:Bupin/Halaman_Camera.dart';
 import 'package:Bupin/Halaman_Soal.dart';
 import 'package:Bupin/Home_Het.dart';
 import 'package:Bupin/Home_Belajar.dart';
-import 'package:Bupin/test.dart';
 import 'package:Bupin/widgets/scann_aniamtion/scanning_effect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   int _selectedIndex = 0;
 
-  static final List<Widget> _widgetOptions = <Widget>[  Bimbee(),
+  static final List<Widget> _widgetOptions = <Widget>[  HalamanBelajar(),
     HalmanHet(),
   
   ];

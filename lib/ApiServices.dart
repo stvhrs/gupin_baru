@@ -12,7 +12,7 @@ import 'package:Bupin/models/soal.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 const List<String> list = <String>[

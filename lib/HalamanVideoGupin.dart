@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pod_player/pod_player.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart' as ytx;
 import 'dart:math' as ran;
 
 ///
@@ -38,89 +37,44 @@ class GupinVideoState extends State<GupinVideo>
 
   @override
   void dispose() {
-    // ScaffoldMessenger.of(context).dispose();f
     animationcon.dispose();
-    videoYoutube.dispose();
-    audioYoutube.dispose();
+    controller.dispose();
 
-    noInternet = true;
     super.dispose();
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  late final PodPlayerController controller;
 
-  late final PodPlayerController videoYoutube;
-
+  String linkQrVideo = "";
+  Video? video;
   bool noInternet = true;
 
-  late PodPlayerController audioYoutube;
   Future<void> fetchApi() async {
-    var yt = ytx.YoutubeExplode();
+    final dio = Dio();
 
-    var manifest = await yt.videos.streamsClient.getManifest(widget.link);
-    audioYoutube = PodPlayerController(
-      playVideoFrom: PlayVideoFrom.network(
-        manifest.audioOnly.first.url.toString(),
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-      ),
-      podPlayerConfig: PodPlayerConfig(
-        autoPlay: false,
-      ),
-    )..initialise();
-    videoYoutube = PodPlayerController(
-      playVideoFrom: PlayVideoFrom.network(
-        manifest.videoOnly.bestQuality.url.toString(),
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-      ),
-      podPlayerConfig: const PodPlayerConfig(
-        autoPlay: false,
-      ),
-    )..initialise();
+    linkQrVideo = widget.link
+        .replaceAll("buku.bupin.id/?", "bupin.id/api/apibarang.php?kodeQR=");
+    final response = await dio.get(linkQrVideo);
 
-    videoYoutube.addListener(() {
-      if (videoYoutube.isVideoBuffering || audioYoutube.isVideoBuffering) {
-        videoYoutube.pause();
-        audioYoutube.pause();
-        if (videoYoutube.videoPlayerValue!.position !=
-            audioYoutube.videoPlayerValue!.position) {
-          audioYoutube.videoSeekTo(videoYoutube.videoPlayerValue!.position);
-        }
+    log(response.statusCode.toString());
+    if (response.statusCode != 200) {
+      noInternet = true;
+      return;
+    }
 
-        // ScaffoldMessenger.of(context)
-        //     .showSnackBar(SnackBar(content: Text("Loading")));
-      } else {
-        if (!videoYoutube.isVideoBuffering &&
-            !audioYoutube.isVideoBuffering &&
-            !videoYoutube.isVideoPlaying &&
-            !audioYoutube.isVideoPlaying) {
-          videoYoutube.play();
-          audioYoutube.play();
-          //  ScaffoldMessenger.of(context).clearSnackBars();
-        }
-      }
-
-      if (videoYoutube.isVideoPlaying) {
-        audioYoutube.play();
-      } else {
-        audioYoutube.pause();
-
-        // videoYoutube.removeListener(() {});
-      }
-    });
-    ;
-   Timer.periodic(Duration(seconds: 3), (timer) {
-  if(videoYoutube.isInitialised&&audioYoutube.isInitialised){
- audioYoutube.play();
-      videoYoutube.play();
-      timer.cancel();
-
-  }
-     
-    });
     noInternet = false;
+    if (response.data[0]["ytid"] == null &&
+        response.data[0]["ytidDmp"] == null) {
+      return;
+    } else {
+      video = Video.fromMap(response.data[0]);
+      controller = PodPlayerController(
+        playVideoFrom: PlayVideoFrom.youtube(video!.ytId!),
+        podPlayerConfig: const PodPlayerConfig(
+          autoPlay: true,
+        ),
+      )..initialise();
+    }
   }
 
   @override
@@ -128,7 +82,9 @@ class GupinVideoState extends State<GupinVideo>
     return WillPopScope(
         onWillPop: () {
           Navigator.pop(context, false);
-
+          if (noInternet == false) {
+            controller.pause();
+          }
           return Future.value(true);
         },
         child: FutureBuilder<void>(
@@ -141,6 +97,7 @@ class GupinVideoState extends State<GupinVideo>
                           padding: const EdgeInsets.all(15.0),
                           child: GestureDetector(
                               onTap: () {
+                                controller.pause();
                                 Navigator.pop(context, false);
                               },
                               child: CircleAvatar(
@@ -148,7 +105,7 @@ class GupinVideoState extends State<GupinVideo>
                                 child: Center(
                                   child: Icon(
                                     Icons.arrow_back_rounded,
-                                    color: widget.color,
+                                    color: Theme.of(context).primaryColor,
                                     size: 15,
                                     weight: 100,
                                   ),
@@ -157,7 +114,7 @@ class GupinVideoState extends State<GupinVideo>
                         ),
                         centerTitle: true,
                         automaticallyImplyLeading: false,
-                        backgroundColor: widget.color,
+                        backgroundColor: Theme.of(context).primaryColor,
                       ),
                       backgroundColor: Colors.white,
                       body: Stack(alignment: Alignment.center, children: [
@@ -171,107 +128,112 @@ class GupinVideoState extends State<GupinVideo>
                           width: MediaQuery.of(context).size.width * 0.5,
                         ),
                       ]))
-                  : Scaffold(
-                      backgroundColor: Colors.white,
-                      appBar: AppBar(
-                        centerTitle: true,
-                        leading: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context, false);
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_back_rounded,
-                                    color: widget.color,
-                                    size: 15,
-                                    weight: 100,
-                                  ),
-                                ),
-                              )),
-                        ),
-                        backgroundColor: widget.color,
-                        title: Text(
-                          widget.judul,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                      body: SingleChildScrollView(
-                        physics: NeverScrollableScrollPhysics(),
-                        child: Column(
-                          children: [
-                            Stack(
-                                clipBehavior: Clip.none,
-                                alignment: Alignment.center,
-                                children: [
-                                  Transform.scale(
-                                    scale: 0.1,
-                                    child: PodVideoPlayer(
-                                      controller: audioYoutube,
+                  : video == null
+                      ? HalamanLaporan(
+                          linkQrVideo.replaceAll(
+                            "https://bupin.id/api/apibarang.php?kodeQR=",
+                            "",
+                          ),
+                        )
+                      : Scaffold(
+                          backgroundColor: Colors.white,
+                          appBar: AppBar(
+                            centerTitle: true,
+                            leading: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context, false);
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.arrow_back_rounded,
+                                        color: Theme.of(context).primaryColor,
+                                        size: 15,
+                                        weight: 100,
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    color: Colors.black,
-                                    width: MediaQuery.of(context).size.width,
-                                    height: MediaQuery.of(context).size.width *
-                                        9 /
-                                        16,
-                                  ),
-                                  Image.asset(
-                                    "asset/logo.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                  ),
-                                  FadeTransition(
-                                    opacity: _animation,
-                                    child: PodVideoPlayer(
-                                      controller: videoYoutube,
-                                      matchFrameAspectRatioToVideo: true,
-                                      matchVideoAspectRatioToFrame: true,
-                                      onToggleFullScreen: (isFullScreen) {
-                                        if (videoYoutube.videoPlayerValue!.size
-                                                .aspectRatio ==
-                                            1.7777777777777777) {
-                                          if (!isFullScreen) {
-                                            SystemChrome
-                                                .setPreferredOrientations([
-                                              DeviceOrientation.portraitUp
-                                            ]);
-                                          } else {
-                                            SystemChrome
-                                                .setPreferredOrientations([
-                                              DeviceOrientation.landscapeLeft
-                                            ]);
-                                          }
-
-                                          return Future.delayed(
-                                              Duration(microseconds: 0));
-                                        } else {
-                                          return Future.delayed(
-                                            Duration(microseconds: 0),
-                                            () {
-                                              videoYoutube.enableFullScreen();
-                                            },
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  )
-                                ]),
-                            Image.asset(
-                              "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-                              width: MediaQuery.of(context).size.width,
-                              color: widget.color,
+                                  )),
                             ),
-                          ],
-                        ),
-                      ));
+                            backgroundColor: Theme.of(context).primaryColor,
+                            title: Text(
+                              video!.namaVideo!,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          body: SingleChildScrollView(
+                            physics: NeverScrollableScrollPhysics(),
+                            child: Column(
+                              children: [
+                                Stack(
+                                    clipBehavior: Clip.none,
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        color: Colors.black,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                9 /
+                                                16,
+                                      ),
+                                      Image.asset(
+                                        "asset/logo.png",
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                      ),
+                                      FadeTransition(
+                                        opacity: _animation,
+                                        child: PodVideoPlayer(
+                                          controller: controller,
+                                          matchFrameAspectRatioToVideo: true,
+                                          matchVideoAspectRatioToFrame: true,
+                                          onToggleFullScreen: (isFullScreen) {
+                                            if (controller.videoPlayerValue!
+                                                    .size.aspectRatio ==
+                                                1.7777777777777777) {
+                                              if (!isFullScreen) {
+                                                SystemChrome
+                                                    .setPreferredOrientations([
+                                                  DeviceOrientation.portraitUp
+                                                ]);
+                                              } else {
+                                                SystemChrome
+                                                    .setPreferredOrientations([
+                                                  DeviceOrientation
+                                                      .landscapeLeft
+                                                ]);
+                                              }
+
+                                              return Future.delayed(
+                                                  Duration(microseconds: 0));
+                                            } else {
+                                              return Future.delayed(
+                                                Duration(microseconds: 0),
+                                                () {
+                                                  controller.enableFullScreen();
+                                                },
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      )
+                                    ]),
+                                Image.asset(
+                                  "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
+                                  width: MediaQuery.of(context).size.width,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ));
             }));
   }
 }
