@@ -5,7 +5,7 @@ import 'package:Bupin/Halaman_Mapel/Tryout.dart';
 import 'package:Bupin/Halaman_Soal/quiz_screen.dart';
 import 'package:Bupin/models/To.dart';
 import 'package:Bupin/models/soal.dart';
-import 'package:Bupin/styles/PageTransitionTheme.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

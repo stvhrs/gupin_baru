@@ -2,7 +2,7 @@ import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/Halaman_Login.dart';
 import 'package:Bupin/Home.dart';
 import 'package:Bupin/loadingScreen.dart';
-import 'package:Bupin/test.dart';
+
 import 'package:Bupin/testapi.dart';
 
 import 'package:flutter/material.dart';

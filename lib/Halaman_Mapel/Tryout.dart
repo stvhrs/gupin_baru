@@ -3,7 +3,7 @@ import 'package:Bupin/HalamanVideoGupin.dart';
 import 'package:Bupin/Halaman_Soal/quiz_screen.dart';
 import 'package:Bupin/Halaman_Video.dart';
 import 'package:Bupin/models/Video.dart';
-import 'package:Bupin/styles/PageTransitionTheme.dart';
+
 import 'package:Bupin/styles/capital.dart';
 import 'package:flutter/cupertino.dart';
 

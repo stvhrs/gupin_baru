@@ -1,105 +1,30 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:provider/provider.dart';
+
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:developer';
+
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/Halaman_Camera.dart';
 import 'package:Bupin/Halaman_Login.dart';
 import 'package:Bupin/Halman_Mapel.dart';
-import 'package:Bupin/styles/PageTransitionTheme.dart';
+
 import 'package:Bupin/widgets/scann_aniamtion/scanning_effect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tex_text/tex_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
-
-class HalmanScan extends StatefulWidget {
-  const HalmanScan({super.key});
-
-  @override
-  State<HalmanScan> createState() => _HalmanScanState();
-}
-
-class _HalmanScanState extends State<HalmanScan> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  final List<Widget> sliders = [
-    Image.asset("asset/2.png"),
-    Image.asset("asset/3.png"),
-    Image.asset("asset/1.png"),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        shadowColor: Colors.black,
-        actions: [
-          IconButton(
-              onPressed: () async {
-                bool logout = await ApiService().logout();
-                if (logout) {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
-                  ));
-                }
-              },
-              icon: Icon(Icons.logout))
-        ],
-        leadingWidth: MediaQuery.of(context).size.width * 0.3,
-        leading: Image.asset(
-          "asset/gupin.png",
-        ),
-        // backgroundColor: const Color.fromARGB(255, 48, 47, 114),
-      ),
-      body: Container(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          FlutterCarousel(
-            options: CarouselOptions(
-              autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 7),
-              disableCenter: true,
-              height: MediaQuery.of(context).size.width * 6 / 16,
-              indicatorMargin: 12.0,
-              viewportFraction: 1,
-              enableInfiniteScroll: true,
-            ),
-            items: sliders,
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 3),
-            child: Text(
-              "Pelajaran " + ApiService.user!.jenjang,
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
-            ),
-          ),
-          Expanded(
-            child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 5),
-                child: Container(
-                    padding:
-                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4),
-                      itemCount: ApiService.listMapel!.length,
-                      itemBuilder: (context, index) => IconMapel(
-                          image: ApiService.listMapel![index].asset,
-                          judul: ApiService.listMapel![index].mapel,
-                          idMapel: ApiService.listMapel![index].idMapel,
-                          color: ApiService.listMapel![index].color),
-                    ))),
-          ),
-        ]),
-      ),
-    ));
-  }
-}
+import 'package:shimmer/shimmer.dart';
 
 class IconMapel extends StatelessWidget {
   final Color color;
@@ -121,9 +46,9 @@ class IconMapel extends StatelessWidget {
           Container(
             width: MediaQuery.of(context).size.width * 0.15,
             height: MediaQuery.of(context).size.width * 0.15,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-            ),
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.circular(15),
+            // ),
             child: InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -167,5 +92,230 @@ class IconMapel extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class HalmanBelajar extends StatelessWidget {
+  const HalmanBelajar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          Image.asset("asset/4.png"),
+          NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return [HomAppBar()];
+              },
+              body: Stack(
+                children: [Container(
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).padding.top *
+                                        1.5),
+                                decoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 237, 240, 247),
+                                    borderRadius: 
+                                    BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15))),
+                
+                                    
+                              
+                                width: MediaQuery.of(context).size.width,
+                              ),
+                  Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      child: ListView(padding: EdgeInsets.zero, children: [
+                        Card(
+                          margin: EdgeInsets.only(left: 6,right: 6,bottom: 10),elevation: 2,
+                          color: Colors.white,
+                          surfaceTintColor: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text(
+                                  "Pelajaran SMP VII ",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 15,
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                              ),
+                              Container(
+                                  child: Container(
+                                      padding: const EdgeInsets.only(
+                                          left: 10,
+                                          right: 10,
+                                          bottom: 10,
+                                          top: 10),
+                                      child: GridView.builder(
+                                        padding: EdgeInsets.zero,
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 4),
+                                        itemCount: ApiService.listMapel!.length,
+                                        itemBuilder: (context, index) =>
+                                            IconMapel(
+                                                image: ApiService
+                                                    .listMapel![index].asset,
+                                                judul: ApiService
+                                                    .listMapel![index].mapel,
+                                                idMapel: ApiService
+                                                    .listMapel![index].idMapel,
+                                                color: ApiService
+                                                    .listMapel![index].color),
+                                      ))),
+                            ],
+                          ),
+                        ), Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset("asset/tutor.png")),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset("asset/beli.png")),
+                        ),
+                       
+                      ])),
+                ],
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+class HomAppBar extends StatelessWidget {
+  double top = 0;
+  final List<Widget> sliders = [
+    Image.asset(
+      "asset/2.png",
+      fit: BoxFit.cover,
+    ),
+    Image.asset(
+      "asset/3.png",
+      fit: BoxFit.cover,
+    ),
+    Image.asset(
+      "asset/1.png",
+      fit: BoxFit.cover,
+    ),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+        backgroundColor: Colors.transparent,
+        // bottom: PreferredSize(
+        //   preferredSize: Size.fromHeight(10),
+        //   child: Container(height: 10,
+        //     decoration: BoxDecoration(
+        //         color: Colors.white,
+        //         borderRadius: BorderRadius.only(
+        //             topLeft: Radius.circular(100),
+        //             topRight: Radius.circular(100))),
+        //   ),
+        // ),
+        surfaceTintColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        stretch: true,
+        expandedHeight: MediaQuery.of(context).size.height * 0.2,
+        floating: false,
+        actions: [],
+        pinned: true,
+        flexibleSpace: Stack(alignment: Alignment.topCenter, children: [
+          Positioned.fill(
+              child: Image.asset(
+            "asset/4.png",
+            fit: BoxFit.fitWidth,
+          )),
+          LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            top = constraints.biggest.height;
+            log(top.toString());
+            return FlexibleSpaceBar(
+              titlePadding: const EdgeInsets.only(bottom: 5, left: 10,right: 10),
+              title: AnimatedOpacity(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset(
+                      'asset/gupin.png',
+                      height: 40,
+                    ),
+                    IconButton(
+                        onPressed: () async {
+                          bool logout = await ApiService().logout();
+                          if (logout) {
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ));
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.power_settings_new_outlined,
+                          color: Colors.white,
+                        )),
+                  ],
+                ),
+                duration: const Duration(milliseconds: 200),
+                opacity: top <=
+                        MediaQuery.of(context).padding.top + kToolbarHeight 
+                    ? 1.0
+                    : 0.0,
+              ),
+              background: Container(
+                child: OverflowBox(
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned.fill(
+                          child: Image.asset(
+                        "asset/4.png",
+                        fit: BoxFit.fitWidth,
+                      )),
+                      Positioned(
+                        bottom: -140,
+                        child: Container(
+                          padding: EdgeInsets.only(top: 10),
+                          width: MediaQuery.of(context).size.width,
+                          child: FlutterCarousel(
+                            options: CarouselOptions(
+                              autoPlay: true,
+                              autoPlayCurve: Curves.easeInCirc,
+                              autoPlayInterval: const Duration(seconds: 5),
+                              disableCenter: true,
+                              indicatorMargin: 12.0,
+                              showIndicator: false,
+                              viewportFraction: 1,
+                              // height: MediaQuery.of(context).size.h,
+                              autoPlayAnimationDuration:
+                                  Duration(milliseconds: 500),
+                              enableInfiniteScroll: true,
+                            ),
+                            items: sliders,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          })
+        ]));
   }
 }
