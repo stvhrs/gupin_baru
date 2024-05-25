@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:Bupin/HalamanVideoGupin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/Halaman_Login.dart';
 import 'package:Bupin/Halman_Mapel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class IconMapel extends StatelessWidget {
   final Color color;
@@ -80,6 +82,15 @@ class IconMapel extends StatelessWidget {
 }
 
 class HalamanBelajar extends StatelessWidget {
+    Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   const HalamanBelajar({Key? key}) : super(key: key);
 
   @override
@@ -160,17 +171,35 @@ class HalamanBelajar extends StatelessWidget {
                                       ))),
                             ],
                           ),
-                        ), Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.asset("asset/tutor.png")),
+                        ), InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => GupinVideo(
+                                  "https://www.youtube.com/watch?v=4KEs7FhZWQw",
+                                  Theme.of(context).primaryColor,
+                                  "Product Knowledge Gupin"),
+                            ));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset("asset/tutor.png")),
+                          ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.asset("asset/beli.png")),
+                        InkWell(
+                          onTap: () async {
+                            _launchInBrowser(
+                                Uri.parse("https://pemesanan.bupin.id/"));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset("asset/beli.png")),
+                          ),
                         ),
                        
                       ])),

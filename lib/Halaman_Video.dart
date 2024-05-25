@@ -193,33 +193,48 @@ class HalamanVideoState extends State<HalamanVideo>
                                           matchFrameAspectRatioToVideo: true,
                                           matchVideoAspectRatioToFrame: true,
                                           onToggleFullScreen: (isFullScreen) {
-                                            if (controller.videoPlayerValue!
-                                                    .size.aspectRatio ==
-                                                1.7777777777777777) {
-                                              if (!isFullScreen) {
-                                                SystemChrome
-                                                    .setPreferredOrientations([
-                                                  DeviceOrientation.portraitUp
-                                                ]);
-                                              } else {
-                                                SystemChrome
-                                                    .setPreferredOrientations([
-                                                  DeviceOrientation
-                                                      .landscapeLeft
-                                                ]);
-                                              }
+                                        if (controller!.videoPlayerValue!.size
+                                                .aspectRatio ==
+                                            1.7777777777777777) {
+                                          if (!isFullScreen) {
+                                            SystemChrome
+                                                .setPreferredOrientations([
+                                              DeviceOrientation.portraitUp
+                                            ]);
+                                          } else {
+                                            SystemChrome
+                                                .setPreferredOrientations([
+                                              DeviceOrientation.landscapeLeft
+                                            ]);
+                                            if (controller!.isFullScreen) {
 
-                                              return Future.delayed(
-                                                  Duration(microseconds: 0));
-                                            } else {
-                                              return Future.delayed(
-                                                Duration(microseconds: 0),
-                                                () {
-                                                  controller.enableFullScreen();
-                                                },
-                                              );
-                                            }
-                                          },
+                                             
+                                            } else {  
+                                              
+                                              SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+                                              
+                                              
+                                              }
+                                          }
+
+                                          return Future.delayed(
+                                              Duration(microseconds: 0));
+                                        } else {
+                                          return Future.delayed(
+                                            Duration(microseconds: 0),
+                                            () {
+  if (controller!.isFullScreen) {
+
+                                             
+                                            } else {  
+                                              
+                                              SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+                                              
+                                              
+                                              }                                            },
+                                          );
+                                        }
+                                      },
                                         ),
                                       )
                                     ]),

@@ -80,7 +80,7 @@ class _VideoItemState extends State<VideoItem> {
                     Expanded(
                       child: Padding(
                           padding: const EdgeInsets.only(left: 8),
-                          child:  AnimatedOpacity(  duration: const Duration(milliseconds: 500),
+                          child:  AnimatedOpacity(  duration: const Duration(milliseconds: 1000),
                 opacity: widget.judul == ""  
                     ? 0
                     :  1.0,

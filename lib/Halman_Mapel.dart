@@ -27,10 +27,11 @@ class HalamanMapel extends StatefulWidget {
   State<HalamanMapel> createState() => _HalamanMapelState();
 }
 
-class _HalamanMapelState extends State<HalamanMapel> {
+class _HalamanMapelState extends State<HalamanMapel>with AutomaticKeepAliveClientMixin {
   bool _stretch = true;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor:   widget.color,
       appBar: PreferredSize(
@@ -356,4 +357,8 @@ class _HalamanMapelState extends State<HalamanMapel> {
       
     
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

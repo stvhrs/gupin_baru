@@ -136,8 +136,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 10, right: 10, top: 20),
-                    child: Row(
-                      children: [
+                    child:  
                         Text(
                           "${widget.topicType.toTitleCase()}",
                           style: Theme.of(context)
@@ -149,8 +148,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                   fontWeight: FontWeight.w400),
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ],
-                    ),
+                    
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 14, bottom: 10),
