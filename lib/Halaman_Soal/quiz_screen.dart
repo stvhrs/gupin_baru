@@ -381,8 +381,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                 ),
                                                               ],
                                                             )
-                                                          : Flexible(
-                                                              child: Row(
+                                                          :  Row(
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment
                                                                         .center,
@@ -411,7 +410,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ),
+                                                            
                                                       isLocked == true
                                                           ? questionOption
                                                                   .isCorrect!
