@@ -371,8 +371,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                           placeholderColor:
                                                                               widget
                                                                                   .color,
-                                                                          image: myquestions
-                                                                              .imageUrl,
+                                                                          image: questionOption.text!
+                                                                              
                                                                         )),
                                                                   ),
                                                           ): Flexible(
