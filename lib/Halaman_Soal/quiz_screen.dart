@@ -340,60 +340,42 @@ class _QuizScreenState extends State<QuizScreen> {
                                                         const BorderRadius.all(
                                                             Radius.circular(10)),
                                                   ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      questionOption.text!
-                                                              .contains("https")
-                                                          ? Row(
+                                                  child: 
+                                                       Row(
                                                               children: [
-                                                                Flexible(
-                                                                  child: Text(
+                                                                Text(
                                                                     "$letters",
                                                                     style:
                                                                         const TextStyle(
                                                                             fontSize:
                                                                                 16),
-                                                                  ),
+                                                                  
                                                                 ),
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                          left: 10),
-                                                                  child: ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(
-                                                                                  5),
-                                                                      child: FadeInImage
-                                                                          .assetNetwork(
-                                                                        placeholder:
-                                                                            "asset/loading.png",
-                                                                        placeholderColor:
-                                                                            widget
-                                                                                .color,
-                                                                        image: myquestions
-                                                                            .imageUrl,
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            )
-                                                          :  Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Text(
-                                      letters,                                                                    style:
-                                                                          const TextStyle(
-                                                                              fontSize:
-                                                                                  16),
-                                                                    
+                                                             questionOption.text!
+                                                              .contains("https")
+                                                          ?   Flexible(
+                                                            child: Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .only(
+                                                                            left: 10),
+                                                                    child: ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius
+                                                                                .circular(
+                                                                                    5),
+                                                                        child: FadeInImage
+                                                                            .assetNetwork(
+                                                                          placeholder:
+                                                                              "asset/loading.png",
+                                                                          placeholderColor:
+                                                                              widget
+                                                                                  .color,
+                                                                          image: myquestions
+                                                                              .imageUrl,
+                                                                        )),
                                                                   ),
-                                                                  Flexible(
+                                                          ): Flexible(
                                                                     child: Padding(
                                                                       padding:
                                                                           const EdgeInsets
@@ -408,8 +390,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ],
-                                                              ),
+                                                            
+                                                        
                                                             
                                                       isLocked == true
                                                           ? questionOption
