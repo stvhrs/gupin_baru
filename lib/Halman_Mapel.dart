@@ -334,9 +334,9 @@ class _HalamanMapelState extends State<HalamanMapel>with AutomaticKeepAliveClien
                                                           "ytId",
                                                           "namaVideo",
                                                           "linkVideo",
-                                                          "thumbnail"),
+                                                          "thumbnail",""),
                                                       "",
-                                                      widget.color)))
+                                                      widget.color,"")))
                                           : Column(
                                               children: List.generate(
                                                   snapshot.data!.length,
@@ -344,7 +344,7 @@ class _HalamanMapelState extends State<HalamanMapel>with AutomaticKeepAliveClien
                                                       snapshot.data![index],
                                                       snapshot.data![index]
                                                           .namaVideo!,
-                                                      widget.color))
+                                                      widget.color,snapshot.data![index].pdfUrl))
                                                );
                                     })
                               

@@ -219,7 +219,7 @@ class ApiService {
       return false;
     } else {
       user = User.fromMap(response.data["data"][0]);
-      await prefs.setString('user', jsonEncode(response.data["data"][0]));
+      await prefs.setString("newGupin", jsonEncode(response.data["data"][0]));
       await getMapel();
       await getTo();
 
@@ -244,7 +244,7 @@ class ApiService {
   Future<bool> autoLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var credential = prefs.getString(
-      'user',
+      "newGupin",
     );
 
     if (credential != null) {
@@ -254,6 +254,7 @@ class ApiService {
       await getTo();
       return true;
     } else {
+      prefs.clear();
       return false;
     }
   }
@@ -372,7 +373,7 @@ class ApiService {
             .contains(element["mapel"])) {
 element["thumbnail"]=              await getThumnial(element["link_youtube"] );
           tempListMapel.add(Video((element["link_youtube"] as String),
-              element["judul_materi"], element["link_youtube"],element["thumbnail"]));
+              element["judul_materi"], element["link_youtube"],element["thumbnail"],element["nama_file"]));
         }
       }
 

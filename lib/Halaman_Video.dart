@@ -4,14 +4,12 @@
 
 import 'dart:developer';
 
-
 import 'package:Bupin/Halaman_Laporan_Error.dart';
 import 'package:Bupin/models/Video.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pod_player/pod_player.dart';
-
 
 class HalamanVideo extends StatefulWidget {
   final String link;
@@ -68,6 +66,7 @@ class HalamanVideoState extends State<HalamanVideo>
       controller = PodPlayerController(
         playVideoFrom: PlayVideoFrom.youtube(video!.ytId!),
         podPlayerConfig: const PodPlayerConfig(
+          // videoQualityPriority: [720, 360],
           autoPlay: true,
         ),
       )..initialise();
@@ -193,48 +192,47 @@ class HalamanVideoState extends State<HalamanVideo>
                                           matchFrameAspectRatioToVideo: true,
                                           matchVideoAspectRatioToFrame: true,
                                           onToggleFullScreen: (isFullScreen) {
-                                        if (controller!.videoPlayerValue!.size
-                                                .aspectRatio ==
-                                            1.7777777777777777) {
-                                          if (!isFullScreen) {
-                                            SystemChrome
-                                                .setPreferredOrientations([
-                                              DeviceOrientation.portraitUp
-                                            ]);
-                                          } else {
-                                            SystemChrome
-                                                .setPreferredOrientations([
-                                              DeviceOrientation.landscapeLeft
-                                            ]);
-                                            if (controller!.isFullScreen) {
-
-                                             
-                                            } else {  
-                                              
-                                              SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-                                              
-                                              
+                                            if (controller!.videoPlayerValue!
+                                                    .size.aspectRatio ==
+                                                1.7777777777777777) {
+                                              if (!isFullScreen) {
+                                                SystemChrome
+                                                    .setPreferredOrientations([
+                                                  DeviceOrientation.portraitUp
+                                                ]);
+                                              } else {
+                                                SystemChrome
+                                                    .setPreferredOrientations([
+                                                  DeviceOrientation
+                                                      .landscapeLeft
+                                                ]);
+                                                if (controller!.isFullScreen) {
+                                                } else {
+                                                  SystemChrome
+                                                      .setEnabledSystemUIMode(
+                                                          SystemUiMode
+                                                              .leanBack);
+                                                }
                                               }
-                                          }
 
-                                          return Future.delayed(
-                                              Duration(microseconds: 0));
-                                        } else {
-                                          return Future.delayed(
-                                            Duration(microseconds: 0),
-                                            () {
-  if (controller!.isFullScreen) {
-
-                                             
-                                            } else {  
-                                              
-                                              SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-                                              
-                                              
-                                              }                                            },
-                                          );
-                                        }
-                                      },
+                                              return Future.delayed(
+                                                  Duration(microseconds: 0));
+                                            } else {
+                                              return Future.delayed(
+                                                Duration(microseconds: 0),
+                                                () {
+                                                  if (controller!
+                                                      .isFullScreen) {
+                                                  } else {
+                                                    SystemChrome
+                                                        .setEnabledSystemUIMode(
+                                                            SystemUiMode
+                                                                .leanBack);
+                                                  }
+                                                },
+                                              );
+                                            }
+                                          },
                                         ),
                                       )
                                     ]),

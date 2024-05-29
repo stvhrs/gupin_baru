@@ -1,6 +1,7 @@
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/HalamanVideoGupin.dart';
 import 'package:Bupin/Halaman_Video.dart';
+import 'package:Bupin/Halaman_pdf.dart';
 import 'package:Bupin/models/Video.dart';
 
 import 'package:Bupin/styles/capital.dart';
@@ -12,10 +13,10 @@ import 'package:timeline_tile/timeline_tile.dart';
 
 class VideoItem extends StatefulWidget {
   final Video video;
-
+  final String pdfUrl;
   final String judul;
   final Color color;
-  VideoItem(this.video, this.judul, this.color);
+  VideoItem(this.video, this.judul, this.color,this.pdfUrl);
 
   @override
   State<VideoItem> createState() => _VideoItemState();
@@ -30,9 +31,8 @@ class _VideoItemState extends State<VideoItem> {
           color: widget.color, padding: EdgeInsets.only(right: 20), width: 11),
       afterLineStyle: LineStyle(color: widget.color, thickness: 5),
       beforeLineStyle: LineStyle(color: widget.color, thickness: 5),
-      endChild: Stack(
-        alignment: Alignment.topLeft,
-        clipBehavior: Clip.none,
+      endChild: Column(
+       
         children: [
           InkWell(
             onTap: widget.judul == ""
@@ -99,6 +99,12 @@ class _VideoItemState extends State<VideoItem> {
               ),
             ),
           ),
+
+InkWell(child: Card(child: Text("Rangkuman"),),onTap: (){
+  Navigator.of(context).push(MaterialPageRoute(builder: (context) => PDFViewerCachedFromUrl(url: widget.pdfUrl),));
+},)
+
+
         ],
       ),
     );
