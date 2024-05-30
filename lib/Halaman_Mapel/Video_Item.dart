@@ -29,7 +29,7 @@ class _VideoItemState extends State<VideoItem> {
       afterLineStyle: LineStyle(color: widget.color, thickness: 5),
       beforeLineStyle: LineStyle(color: widget.color, thickness: 5),
       endChild: Container(
-              margin: EdgeInsets.only(bottom: 40),
+              margin: EdgeInsets.only(bottom: 35),
 
         child: Column(
           children: [
