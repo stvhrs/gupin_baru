@@ -53,68 +53,65 @@ class _ListToState extends State<ListTo> {
         .toList();
 
     return Scaffold(
-      backgroundColor:Color.fromARGB(255, 237, 240, 247),
+      backgroundColor: Color.fromARGB(255, 237, 240, 247),
       appBar: AppBar(
-        backgroundColor: widget.color, leading: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context, false);
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_back_rounded,
-                                    color: widget.color,
-                                    size: 15,
-                                    weight: 100,
-                                  ),
-                                ),
-                              )),
-                        ),
+        backgroundColor: widget.color,
+        leading: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context, false);
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Center(
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: widget.color,
+                    size: 15,
+                    weight: 100,
+                  ),
+                ),
+              )),
+        ),
         title: Text(
-          widget.ptsorpas
-              ? "PTS ${widget.mapel}"
-              : "PAS ${widget.mapel}",
+          widget.ptsorpas ? "PTS ${widget.mapel}" : "PAS ${widget.mapel}",
           style: TextStyle(color: Colors.white),
         ),
       ),
       body: Stack(
-        children: [                              Positioned.fill(
-                                  child: Container(
-                                color: Color.fromARGB(255, 237, 240, 247),
-                              )),
-                              
-                              Positioned.fill(
-                                child:   Image.asset(
-                                      "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",color: widget.color,
-                                      repeat: ImageRepeat.repeatY,
-                                    
-                                  
-                                ),
-                              ),
-          ListView.builder(padding: EdgeInsets.all(15),
+        children: [
+          Positioned.fill(
+              child: Container(
+            color: Color.fromARGB(255, 237, 240, 247),
+          )),
+          Positioned.fill(
+            child: Image.asset(
+              "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
+              color: widget.color,
+              repeat: ImageRepeat.repeatY,
+            ),
+          ),
+          ListView.builder(
+            padding: EdgeInsets.all(15),
             itemCount: tryoutku.length,
             itemBuilder: (context, index) => FutureBuilder(
                 future: ApiService()
                     .getToDetail(tryoutku[index].idmapel!, widget.ptsorpas),
-                builder: (context, snapshot) { 
-                  
-                
-                   if(snapshot.connectionState == ConnectionState.waiting){ 
-                    
-                    return TryoutItem("", widget.color,[],[]);}else{   Map<dynamic, dynamic> randomQuestionsMap =
-                                getRandomQuestionsAndOptions(
-                                    snapshot.data!, snapshot.data!.length);
-          
-                            List<dynamic> randomQuestions =
-                                randomQuestionsMap.keys.toList();
-                            dynamic randomOptions =
-                                randomQuestionsMap.values.toList();
-                    return  TryoutItem(tryoutku[index].namaMapel!, widget.color,randomQuestions,randomOptions);
-                                }
-                     
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return TryoutItem("", widget.color, [], []);
+                  } else {
+                    Map<dynamic, dynamic> randomQuestionsMap =
+                        getRandomQuestionsAndOptions(
+                            snapshot.data!, snapshot.data!.length);
+
+                    List<dynamic> randomQuestions =
+                        randomQuestionsMap.keys.toList();
+                    dynamic randomOptions = randomQuestionsMap.values.toList();
+                    return TryoutItem(tryoutku[index].namaMapel!, widget.color,
+                        randomQuestions, randomOptions);
+                  }
                 }),
           ),
         ],

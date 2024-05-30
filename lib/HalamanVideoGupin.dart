@@ -124,14 +124,14 @@ class HalamanVideoState extends State<GupinVideo>
                                 child: Center(
                                   child: Icon(
                                     Icons.arrow_back_rounded,
-                                    color: Theme.of(context).primaryColor,
+                                    color: widget.color,
                                     size: 15,
                                     weight: 100,
                                   ),
                                 ),
                               )),
                         ),
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: widget.color,
                         title: Text(
                           widget.judul,
                           style: const TextStyle(
@@ -181,7 +181,7 @@ class HalamanVideoState extends State<GupinVideo>
                                               DeviceOrientation.landscapeLeft
                                             ]);
                                             if (controller!.isFullScreen) {
-                                            } else {  
+                                            } else {
                                               SystemChrome
                                                   .setEnabledSystemUIMode(
                                                       SystemUiMode.leanBack);
