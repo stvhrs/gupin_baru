@@ -73,8 +73,8 @@ class _PDFViewerCachedFromUrlState extends State<PDFViewerCachedFromUrl> {
           // });
         },
         widget.url,
-        placeholder: (double progress) => Center(child: Text('$progress %')),
-        errorWidget: (dynamic error) => Center(child: Text(error.toString())),
+        placeholder: (double progress) => Center(child: Text('$progress %',style: TextStyle(fontSize: 18,color: widget.color),)),
+        errorWidget: (dynamic error) => Center(child:  Text('Belum Tersedia',style: TextStyle(fontSize: 18,color: widget.color),)),
       ),
     );
   }
