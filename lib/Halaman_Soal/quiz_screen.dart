@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:Bupin/Halaman_PDF_Soal.dart';
-import 'package:Bupin/Halaman_Soal/results_screen.dart';
 import 'package:Bupin/models/soal.dart';
 import 'package:Bupin/styles/capital.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,33 +45,6 @@ class _QuizScreenState extends State<QuizScreen> {
   bool isLocked = false;
   List optionsLetters = ["A.", "B.", "C.", "D.", "E."];
   List<WiidgetOption> listSelectedOption = [];
-
-  void navigateToNewScreen() {
-    if (_questionNumber < widget.questionlenght.length) {
-      _controller.nextPage(
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.linear,
-      );
-      // setState(() {
-      _questionNumber++;
-      isLocked = false;
-      // });
-      _resetQuestionLocks();
-    } else {
-      _timer?.cancel();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ResultsScreen(
-            score: score,
-            color: widget.color,
-            totalQuestions: widget.questionlenght.length,
-            whichTopic: widget.topicType,
-          ),
-        ),
-      );
-    }
-  }
 
   @override
   void initState() {
@@ -134,7 +106,9 @@ class _QuizScreenState extends State<QuizScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 10, right: 10,),
+                              left: 10,
+                              right: 10,
+                            ),
                             child: Text(
                               "${widget.topicType.toTitleCase()}",
                               style: Theme.of(context)
@@ -290,7 +264,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               child: Row(
                                 // crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Align(alignment: Alignment.topCenter,
+                                  Align(
+                                    alignment: Alignment.topCenter,
                                     child: Text(
                                       "$letters",
                                       style: const TextStyle(fontSize: 16),
@@ -304,7 +279,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                             child: ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(5),
-                                                child: AspectRatio(aspectRatio: 16/9,
+                                                child: AspectRatio(
+                                                  aspectRatio: 16 / 9,
                                                   child: FadeInImage.assetNetwork(
                                                       placeholder:
                                                           "asset/loading.png",

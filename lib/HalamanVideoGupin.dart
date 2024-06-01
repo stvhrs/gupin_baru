@@ -53,7 +53,7 @@ class HalamanVideoState extends State<GupinVideo>
       playVideoFrom: PlayVideoFrom.youtube(widget.link),
       podPlayerConfig: const PodPlayerConfig(
         autoPlay: true,
-        //  videoQualityPriority: [720,360]
+          videoQualityPriority: [720,360]
       ),
     );
      await controller!.initialise();

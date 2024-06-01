@@ -66,11 +66,10 @@ class HalamanVideoState extends State<HalamanVideo>
       controller = PodPlayerController(
         playVideoFrom: PlayVideoFrom.youtube(video!.ytId!),
         podPlayerConfig: const PodPlayerConfig(
-          // videoQualityPriority: [720, 360],
+           videoQualityPriority: [720, 360],
           autoPlay: true,
         ),
-      );
-      await controller.initialise();
+      )..initialise();
     }
   }
 
@@ -87,8 +86,7 @@ class HalamanVideoState extends State<HalamanVideo>
         child: FutureBuilder<void>(
             future: fetchApi(),
             builder: (context, snapshot) {
-              return (noInternet == true ||
-                      snapshot.connectionState == ConnectionState.waiting)
+              return (noInternet == true)
                   ? Scaffold(
                       appBar: AppBar(
                         leading: Padding(
