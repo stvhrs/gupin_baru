@@ -80,21 +80,24 @@ class HalamanLaporan extends StatelessWidget {
             ),
             const Spacer(),
             FutureBuilder(
-              future: ApiService().fetchCs(),
-              builder: (context, snapshot) {
-                return ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.green)),
-                    onPressed:snapshot.connectionState==ConnectionState.waiting?null: () {
-                      _launchInBrowser(snapshot.data!);
-                    },
-                    child: const Text(
-                      "Laporkan ke Whatsapp CS Kami ",
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(color: Colors.white),
-                    ));
-              }
-            ),
+                future: ApiService().fetchCs(),
+                builder: (context, snapshot) {
+                  return ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.green)),
+                      onPressed:
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? null
+                              : () {
+                                  _launchInBrowser(snapshot.data!);
+                                },
+                      child: const Text(
+                        "Laporkan ke Whatsapp CS Kami ",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(color: Colors.white),
+                      ));
+                }),
             const Spacer(
               flex: 7,
             ),

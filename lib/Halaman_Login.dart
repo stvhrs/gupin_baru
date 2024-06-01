@@ -62,7 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(20)),
-              child: Stack(clipBehavior: Clip.none,
+              child: Stack(
+                clipBehavior: Clip.none,
                 children: [
                   Image.asset(
                     "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",

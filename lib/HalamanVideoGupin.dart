@@ -55,8 +55,8 @@ class HalamanVideoState extends State<GupinVideo>
         autoPlay: true,
         //  videoQualityPriority: [720,360]
       ),
-    )
-      ..initialise();
+    );
+     await controller!.initialise();
   }
 
   @override

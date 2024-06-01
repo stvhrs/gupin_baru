@@ -69,7 +69,8 @@ class HalamanVideoState extends State<HalamanVideo>
           // videoQualityPriority: [720, 360],
           autoPlay: true,
         ),
-      )..initialise();
+      );
+      await controller.initialise();
     }
   }
 
@@ -86,7 +87,8 @@ class HalamanVideoState extends State<HalamanVideo>
         child: FutureBuilder<void>(
             future: fetchApi(),
             builder: (context, snapshot) {
-              return (noInternet == true)
+              return (noInternet == true ||
+                      snapshot.connectionState == ConnectionState.waiting)
                   ? Scaffold(
                       appBar: AppBar(
                         leading: Padding(

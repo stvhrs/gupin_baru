@@ -190,10 +190,8 @@ class ApiService {
       String numberString = parts[1];
 
       ujianId = int.tryParse(numberString) ?? 0;
-
     }
-    {
-    }
+    {}
 
     if (jenjang == "cbtsd") {
       link = "https://cbtsd.bupin.id/login.php?$ujianId";
@@ -322,7 +320,8 @@ class ApiService {
         if (!listTryout!
             .map((e) => e.namaMapel)
             .toList()
-            .contains(element["namaMapel"])) {log(element["namaMapel"]+" Tryout");
+            .contains(element["namaMapel"])) {
+          log(element["namaMapel"] + " Tryout");
           listTryout!.add(TryOut.fromMap(element));
         }
       }
@@ -346,7 +345,8 @@ class ApiService {
         if (!tempListMapel
             .map((e) => e.mapel)
             .toList()
-            .contains(element["mapel"])) {log(element["mapel"]+" Mapel");
+            .contains(element["mapel"])) {
+          log(element["mapel"] + " Mapel");
           tempListMapel.add(Mapel.fromMap(element));
         }
       }
@@ -371,9 +371,13 @@ class ApiService {
             .map((e) => e.linkVideo)
             .toList()
             .contains(element["mapel"])) {
-element["thumbnail"]=              await getThumnial(element["link_youtube"] );
-          tempListMapel.add(Video((element["link_youtube"] as String),
-              element["judul_materi"], element["link_youtube"],element["thumbnail"],element["nama_file"]));
+          element["thumbnail"] = await getThumnial(element["link_youtube"]);
+          tempListMapel.add(Video(
+              (element["link_youtube"] as String),
+              element["judul_materi"],
+              element["link_youtube"],
+              element["thumbnail"],
+              element["nama_file"]));
         }
       }
 
@@ -387,15 +391,16 @@ element["thumbnail"]=              await getThumnial(element["link_youtube"] );
     final dio = Dio();
     int status = ptsOrpas ? 1 : 2;
     final response = await dio.get(
-        "https://bupin.id/api/api-tryout-new.php?kelas=${user!.kelas}&mapel=$idMapel&status=$status",);
+      "https://bupin.id/api/api-tryout-new.php?kelas=${user!.kelas}&mapel=$idMapel&status=$status",
+    );
 
     if (response.data == null) {
       return [];
     } else {
       List<WidgetQuestion> tempListTo = [];
 
-      for (var element in  response.data["results"]) {
-         tempListTo.add(WidgetQuestion.fromMap(element));
+      for (var element in response.data["results"]) {
+        tempListTo.add(WidgetQuestion.fromMap(element));
       }
 
       ;
