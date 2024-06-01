@@ -82,7 +82,7 @@ class _VideoItemState extends State<VideoItem> {
                       ),
                       Expanded(
                         child: Padding(
-                            padding: const EdgeInsets.only(left: 8),
+                            padding: const EdgeInsets.only(left: 8,right: 8),
                             child: AnimatedOpacity(
                               duration: const Duration(milliseconds: 1000),
                               opacity: widget.judul == "" ? 0 : 1.0,
@@ -103,7 +103,7 @@ class _VideoItemState extends State<VideoItem> {
                 ),
               ),
             ),
-            Container(width: 3,height:5,color: widget.color,),
+            Container(width: 3,height:7,color: widget.color,),
             InkWell(
               child:Container(width: MediaQuery.of(context).size.width*0.4,
                    padding: EdgeInsets.all(10),
@@ -118,8 +118,11 @@ class _VideoItemState extends State<VideoItem> {
                   child:
                  Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                    children: [Icon(Icons.collections_bookmark_rounded,color: widget.color,)
-,                     Text("Rangkuman",style: TextStyle(fontSize: 12),),
-                   ],
+,                 AnimatedOpacity(
+                              duration: const Duration(milliseconds: 1000),
+                              opacity: widget.judul == "" ? 0 : 1.0,
+                              child:     Text(widget.pdfUrl == ""?"         ":"Rangkuman",style: TextStyle(fontSize: 12),),
+                  ) ],
                  ),
               ),
               onTap:widget.pdfUrl == ""
