@@ -45,18 +45,23 @@ class HalamanVideoState extends State<GupinVideo>
 
     super.dispose();
   }
-
+@override
+  void initState() {
+    fetchApi();
+    super.initState();
+  }
   PodPlayerController? controller;
 
   Future<void> fetchApi() async {
     controller = await PodPlayerController(
       playVideoFrom: PlayVideoFrom.youtube(widget.link),
       podPlayerConfig: const PodPlayerConfig(
-        autoPlay: true,
-          videoQualityPriority: [720,360]
-      ),
+          autoPlay: true, videoQualityPriority: [720, 360]),
     );
-     await controller!.initialise();
+    await controller!.initialise();
+    setState(() {
+      
+    });
   }
 
   @override
@@ -67,11 +72,8 @@ class HalamanVideoState extends State<GupinVideo>
           // controller.pause();
           return Future.value(true);
         },
-        child: FutureBuilder<void>(
-            future: fetchApi(),
-            builder: (context, snapshot) {
-              return (snapshot.connectionState == ConnectionState.waiting ||
-                      controller == null)
+        child:
+                      controller == null
                   ? Scaffold(
                       appBar: AppBar(
                         leading: Padding(
@@ -163,6 +165,11 @@ class HalamanVideoState extends State<GupinVideo>
                                   FadeTransition(
                                     opacity: _animation,
                                     child: PodVideoPlayer(
+                                      onVideoError: () {
+                                        log("steve");
+                                       fetchApi();
+                                        return Text("Loading....");
+                                      },
                                       controller: controller!,
                                       matchFrameAspectRatioToVideo: true,
                                       matchVideoAspectRatioToFrame: true,
@@ -214,7 +221,7 @@ class HalamanVideoState extends State<GupinVideo>
                             ),
                           ],
                         ),
-                      ));
-            }));
+                      ))
+           );
   }
 }

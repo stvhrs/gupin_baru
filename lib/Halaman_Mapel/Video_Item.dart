@@ -29,8 +29,7 @@ class _VideoItemState extends State<VideoItem> {
       afterLineStyle: LineStyle(color: widget.color, thickness: 5),
       beforeLineStyle: LineStyle(color: widget.color, thickness: 5),
       endChild: Container(
-              margin: EdgeInsets.only(bottom: 35),
-
+        margin: EdgeInsets.only(bottom: 35),
         child: Column(
           children: [
             InkWell(
@@ -49,14 +48,17 @@ class _VideoItemState extends State<VideoItem> {
                 height: MediaQuery.of(context).size.width * 0.17,
                 child: Container(
                   // padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 0.5,
-                      blurRadius: 5,
-                      offset: Offset(0, 0), // changes position of shadow
-                    ),
-                  ], borderRadius: BorderRadius.circular(8), color: Colors.white),
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 0.5,
+                          blurRadius: 5,
+                          offset: Offset(0, 0), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -82,7 +84,7 @@ class _VideoItemState extends State<VideoItem> {
                       ),
                       Expanded(
                         child: Padding(
-                            padding: const EdgeInsets.only(left: 8,right: 8),
+                            padding: const EdgeInsets.only(left: 8, right: 8),
                             child: AnimatedOpacity(
                               duration: const Duration(milliseconds: 1000),
                               opacity: widget.judul == "" ? 0 : 1.0,
@@ -103,38 +105,56 @@ class _VideoItemState extends State<VideoItem> {
                 ),
               ),
             ),
-            Container(width: 3,height:7,color: widget.color,),
+            Container(
+              width: 3,
+              height: 7,
+              color: widget.color,
+            ),
             InkWell(
-              child:Container(width: MediaQuery.of(context).size.width*0.4,
-                   padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 0.5,
-                      blurRadius: 5,
-                      offset: Offset(0, 0), // changes position of shadow
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 0.5,
+                    blurRadius: 5,
+                    offset: Offset(0, 0), // changes position of shadow
+                  ),
+                ], borderRadius: BorderRadius.circular(8), color: Colors.white),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(flex: 2,
+                      child: Icon(
+                        Icons.collections_bookmark_rounded,
+                        color: widget.color,
+                      ),
                     ),
-                  ], borderRadius: BorderRadius.circular(8), color: Colors.white),
-                  child:
-                 Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                   children: [Icon(Icons.collections_bookmark_rounded,color: widget.color,)
-,                 AnimatedOpacity(
-                              duration: const Duration(milliseconds: 1000),
-                              opacity: widget.judul == "" ? 0 : 1.0,
-                              child:     Text(widget.pdfUrl == ""?"         ":"Rangkuman",style: TextStyle(fontSize: 12),),
-                  ) ],
-                 ),
+                    Expanded(flex: 3,
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 1000),
+                        opacity: widget.judul == "" ? 0 : 1.0,
+                        child: Text(
+                          widget.pdfUrl == "" ? "         " : "Rangkuman",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-              onTap:widget.pdfUrl == ""
+              onTap: widget.pdfUrl == ""
                   ? () {}
-                  :  () {
-
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      PDFViewerCachedFromUrl(url: widget.pdfUrl,color: widget.color,bab: widget.judul,),
-                ));
-
-              },
+                  : () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PDFViewerCachedFromUrl(
+                          url: widget.pdfUrl,
+                          color: widget.color,
+                          bab: widget.judul,
+                        ),
+                      ));
+                    },
             )
           ],
         ),
