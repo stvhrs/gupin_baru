@@ -58,11 +58,11 @@ class HalamanVideoState extends State<GupinVideo>
   Future<void> fetchApi() async {
     log("fetch video");
     controller = await PodPlayerController(
-      playVideoFrom: PlayVideoFrom.youtube(widget.link,live: false),
+      playVideoFrom: PlayVideoFrom.youtube(widget.link, live: false),
       podPlayerConfig: const PodPlayerConfig(
           autoPlay: true, videoQualityPriority: [720, 360]),
     );
-    await controller!.initialise().catchError((e){
+    await controller!.initialise().catchError((e) {
       log(e.toString());
       log("error");
       fetchApi();
