@@ -66,7 +66,7 @@ class HalamanVideoState extends State<HalamanVideo>
     } else {
       video = Video.fromMap(response.data[0]);
       controller = PodPlayerController(
-        playVideoFrom: PlayVideoFrom.youtube(video!.ytId!),
+        playVideoFrom: PlayVideoFrom.youtube(video!.ytId!,live: false),
         podPlayerConfig: const PodPlayerConfig(
           videoQualityPriority: [720, 360],
           autoPlay: true,

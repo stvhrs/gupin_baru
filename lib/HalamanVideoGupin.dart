@@ -7,6 +7,7 @@ import 'dart:developer';
 import 'package:Bupin/Halaman_Laporan_Error.dart';
 import 'package:Bupin/models/Video.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -38,30 +39,36 @@ class HalamanVideoState extends State<GupinVideo>
 
   @override
   void dispose() {
-    _controller2.dispose();
     if (controller != null) {
+      _controller2.dispose();
       controller!.dispose();
     }
 
     super.dispose();
   }
-@override
+
+  @override
   void initState() {
     fetchApi();
     super.initState();
   }
+
   PodPlayerController? controller;
 
   Future<void> fetchApi() async {
+    log("fetch video");
     controller = await PodPlayerController(
-      playVideoFrom: PlayVideoFrom.youtube(widget.link),
+      playVideoFrom: PlayVideoFrom.youtube(widget.link,live: false),
       podPlayerConfig: const PodPlayerConfig(
           autoPlay: true, videoQualityPriority: [720, 360]),
     );
-    await controller!.initialise();
-    setState(() {
-      
+    await controller!.initialise().catchError((e){
+      log(e.toString());
+      log("error");
+      fetchApi();
     });
+    setState(() {});
+    return;
   }
 
   @override
@@ -72,156 +79,151 @@ class HalamanVideoState extends State<GupinVideo>
           // controller.pause();
           return Future.value(true);
         },
-        child:
-                      controller == null
-                  ? Scaffold(
-                      appBar: AppBar(
-                        leading: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: GestureDetector(
-                              onTap: () {
-                                // controller.pause();
-                                Navigator.pop(context, false);
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_back_rounded,
-                                    color: widget.color,
-                                    size: 15,
-                                    weight: 100,
-                                  ),
-                                ),
-                              )),
-                        ),
-                        centerTitle: true,
-                        automaticallyImplyLeading: false,
-                        backgroundColor: widget.color,
-                      ),
-                      backgroundColor: Colors.white,
-                      body: Stack(alignment: Alignment.center, children: [
-                        Container(
-                          color: Colors.black,
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.width * 9 / 16,
-                        ),
-                        Image.asset(
-                          "asset/logo.png",
-                          width: MediaQuery.of(context).size.width * 0.5,
-                        ),
-                      ]))
-                  : Scaffold(
-                      backgroundColor: Colors.white,
-                      appBar: AppBar(
-                        centerTitle: true,
-                        leading: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context, false);
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_back_rounded,
-                                    color: widget.color,
-                                    size: 15,
-                                    weight: 100,
-                                  ),
-                                ),
-                              )),
-                        ),
-                        backgroundColor: widget.color,
-                        title: Text(
-                          widget.judul,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                      body: SingleChildScrollView(
-                        physics: NeverScrollableScrollPhysics(),
-                        child: Column(
+        child: controller == null
+            ? Scaffold(
+                appBar: AppBar(
+                  leading: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: GestureDetector(
+                        onTap: () {
+                          // controller.pause();
+                          Navigator.pop(context, false);
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_back_rounded,
+                              color: widget.color,
+                              size: 15,
+                              weight: 100,
+                            ),
+                          ),
+                        )),
+                  ),
+                  centerTitle: true,
+                  automaticallyImplyLeading: false,
+                  backgroundColor: widget.color,
+                ),
+                backgroundColor: Colors.white,
+                body: Stack(alignment: Alignment.center, children: [
+                  Container(
+                    color: Colors.black,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width * 9 / 16,
+                  ),
+                  Image.asset(
+                    "asset/logo.png",
+                    width: MediaQuery.of(context).size.width * 0.5,
+                  ),
+                  // Positioned(bottom: 1,
+                  //   child: LinearProgressIndicator(
+                  //     color: widget.color,
+                  //   ),
+                  // )
+                ]))
+            : Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  centerTitle: true,
+                  leading: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_back_rounded,
+                              color: widget.color,
+                              size: 15,
+                              weight: 100,
+                            ),
+                          ),
+                        )),
+                  ),
+                  backgroundColor: widget.color,
+                  title: Text(
+                    widget.judul,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                body: SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.center,
                           children: [
-                            Stack(
-                                clipBehavior: Clip.none,
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    color: Colors.black,
-                                    width: MediaQuery.of(context).size.width,
-                                    height: MediaQuery.of(context).size.width *
-                                        9 /
-                                        16,
-                                  ),
-                                  Image.asset(
-                                    "asset/logo.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                  ),
-                                  FadeTransition(
-                                    opacity: _animation,
-                                    child: PodVideoPlayer(
-                                      onVideoError: () {
-                                        log("steve");
-                                       fetchApi();
-                                        return Text("Loading....");
-                                      },
-                                      controller: controller!,
-                                      matchFrameAspectRatioToVideo: true,
-                                      matchVideoAspectRatioToFrame: true,
-                                      onToggleFullScreen: (isFullScreen) {
-                                        if (controller!.videoPlayerValue!.size
-                                                .aspectRatio ==
-                                            1.7777777777777777) {
-                                          if (!isFullScreen) {
-                                            SystemChrome
-                                                .setPreferredOrientations([
-                                              DeviceOrientation.portraitUp
-                                            ]);
-                                          } else {
-                                            SystemChrome
-                                                .setPreferredOrientations([
-                                              DeviceOrientation.landscapeLeft
-                                            ]);
-                                            if (controller!.isFullScreen) {
-                                            } else {
-                                              SystemChrome
-                                                  .setEnabledSystemUIMode(
-                                                      SystemUiMode.leanBack);
-                                            }
-                                          }
+                            Container(
+                              color: Colors.black,
+                              width: MediaQuery.of(context).size.width,
+                              height:
+                                  MediaQuery.of(context).size.width * 9 / 16,
+                            ),
+                            Image.asset(
+                              "asset/logo.png",
+                              width: MediaQuery.of(context).size.width * 0.5,
+                            ),
+                            FadeTransition(
+                              opacity: _animation,
+                              child: PodVideoPlayer(
+                                onVideoError: () {
+                                  log("steve");
+                                  fetchApi();
+                                  return Text("Loading....");
+                                },
+                                controller: controller!,
+                                matchFrameAspectRatioToVideo: true,
+                                matchVideoAspectRatioToFrame: true,
+                                onToggleFullScreen: (isFullScreen) {
+                                  if (controller!
+                                          .videoPlayerValue!.size.aspectRatio ==
+                                      1.7777777777777777) {
+                                    if (!isFullScreen) {
+                                      SystemChrome.setPreferredOrientations(
+                                          [DeviceOrientation.portraitUp]);
+                                    } else {
+                                      SystemChrome.setPreferredOrientations(
+                                          [DeviceOrientation.landscapeLeft]);
+                                      if (controller!.isFullScreen) {
+                                      } else {
+                                        SystemChrome.setEnabledSystemUIMode(
+                                            SystemUiMode.leanBack);
+                                      }
+                                    }
 
-                                          return Future.delayed(
-                                              Duration(microseconds: 0));
+                                    return Future.delayed(
+                                        Duration(microseconds: 0));
+                                  } else {
+                                    return Future.delayed(
+                                      Duration(microseconds: 0),
+                                      () {
+                                        if (controller!.isFullScreen) {
                                         } else {
-                                          return Future.delayed(
-                                            Duration(microseconds: 0),
-                                            () {
-                                              if (controller!.isFullScreen) {
-                                              } else {
-                                                SystemChrome
-                                                    .setEnabledSystemUIMode(
-                                                        SystemUiMode.leanBack);
-                                              }
-                                            },
-                                          );
+                                          SystemChrome.setEnabledSystemUIMode(
+                                              SystemUiMode.leanBack);
                                         }
                                       },
-                                    ),
-                                  )
-                                ]),
-                            Image.asset(
-                              "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-                              width: MediaQuery.of(context).size.width,
-                              color: widget.color,
-                            ),
-                          ],
-                        ),
-                      ))
-           );
+                                    );
+                                  }
+                                },
+                              ),
+                            )
+                          ]),
+                      Image.asset(
+                        "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
+                        width: MediaQuery.of(context).size.width,
+                        color: widget.color,
+                      ),
+                    ],
+                  ),
+                )));
   }
 }
