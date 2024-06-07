@@ -69,7 +69,7 @@ class IconMapel extends StatelessWidget {
             ),
           ),
           Text(textAlign: TextAlign.center,
-            judul.toTitleCase(),
+            judul,
             maxLines: 1,
             overflow: TextOverflow.visible,
             style: TextStyle(
