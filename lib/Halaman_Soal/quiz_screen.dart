@@ -109,16 +109,18 @@ class _QuizScreenState extends State<QuizScreen> {
                               left: 10,
                               right: 10,
                             ),
-                            child: Text(
-                              "${widget.topicType.toTitleCase()}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400),
-                              overflow: TextOverflow.ellipsis,
+                            child: Flexible(
+                              child: Text(
+                                "${widget.topicType.toTitleCase()}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                         ],

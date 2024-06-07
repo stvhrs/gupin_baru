@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:Bupin/HalamanVideoGupin.dart';
+import 'package:Bupin/styles/capital.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -67,8 +68,8 @@ class IconMapel extends StatelessWidget {
               ),
             ),
           ),
-          Text(
-            judul,
+          Text(textAlign: TextAlign.center,
+            judul.toTitleCase(),
             maxLines: 1,
             overflow: TextOverflow.visible,
             style: TextStyle(

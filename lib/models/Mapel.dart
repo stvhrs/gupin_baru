@@ -38,7 +38,8 @@ class Mapel {
           mapel.toUpperCase().contains("FISIKA")) {
         return "asset/Icon/Fisika.png";
       }
-      if (mapel.toUpperCase().contains("IPS") || mapel.toUpperCase().contains("SOSIAL")) {
+      if (mapel.toUpperCase().contains("IPS") ||
+          mapel.toUpperCase().contains("SOSIAL")) {
         return "asset/Icon/Geografi.png";
       }
       if (mapel.toUpperCase().contains("KIMIA")) {
@@ -66,15 +67,16 @@ class Mapel {
       if (mapel.toUpperCase().contains("SEJARAH")) {
         return "asset/Icon/Sejarah.png";
       }
-      return "asset/Icon/Bahasa Inggris.png";
+      return "asset/Icon/Bahasa Indonesia.png";
     }
 
-String localMapelName(String mapel) {
+    String localMapelName(String mapel) {
       if (mapel.toUpperCase().contains("PRAKARYA")) {
         return "asset/Icon/Fisika.png";
       }
       if (mapel.toUpperCase().contains("AGAMA") ||
-          mapel.toUpperCase().contains("ARAB") ||mapel.toUpperCase().contains("AKIDAH") ||
+          mapel.toUpperCase().contains("ARAB") ||
+          mapel.toUpperCase().contains("AKIDAH") ||
           mapel.toUpperCase().contains("QUR'AN") ||
           mapel.toUpperCase().contains("PAI")) {
         return "PAI";
@@ -93,11 +95,12 @@ String localMapelName(String mapel) {
           mapel.toUpperCase().contains("ALAM") ||
           mapel.toUpperCase().contains("FISIKA")) {
         return "IPA";
-      }if (
-          mapel.toUpperCase().contains("FISIKA")) {
+      }
+      if (mapel.toUpperCase().contains("FISIKA")) {
         return "Fisika";
       }
-      if (mapel.toUpperCase().contains("IPS") || mapel.toUpperCase().contains("SOSIAL")) {
+      if (mapel.toUpperCase().contains("IPS") ||
+          mapel.toUpperCase().contains("SOSIAL")) {
         return "IPS";
       }
       if (mapel.toUpperCase().contains("KIMIA")) {
@@ -122,8 +125,9 @@ String localMapelName(String mapel) {
       if (mapel.toUpperCase().contains("SEJARAH")) {
         return "Sejarah";
       }
-      return "asset/Icon/Bahasa Inggris.png";
+      return mapel;
     }
+
     Color localColor(String mapel) {
       if (mapel.toUpperCase().contains("PRAKARYA")) {
         return Color.fromARGB(255, 247, 195, 26);
@@ -150,7 +154,8 @@ String localMapelName(String mapel) {
           mapel.toUpperCase().contains("FISIKA")) {
         return Color.fromARGB(255, 14, 13, 45);
       }
-      if (mapel.toUpperCase().contains("IPS") || mapel.toUpperCase().contains("SOSIAL")) {
+      if (mapel.toUpperCase().contains("IPS") ||
+          mapel.toUpperCase().contains("SOSIAL")) {
         return Color.fromARGB(255, 101, 166, 225);
       }
       if (mapel.toUpperCase().contains("KIMIA")) {
@@ -178,12 +183,12 @@ String localMapelName(String mapel) {
       if (mapel.toUpperCase().contains("SEJARAH")) {
         return Color.fromARGB(255, 117, 47, 17);
       }
-      return Color.fromARGB(255, 117, 47, 17);
+      return Color.fromARGB(255, 72, 79, 155);
     }
 
     return Mapel(
       data["id_mapel"].toString(),
-     localMapelName(data["mapel"].toString()) ,
+      localMapelName(data["mapel"].toString()),
       data["id_kelas"].toString(),
       data["id_jurusan"].toString(),
       localColor(data["mapel"]),

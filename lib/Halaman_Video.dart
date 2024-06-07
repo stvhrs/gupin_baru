@@ -78,6 +78,7 @@ class HalamanVideoState extends State<HalamanVideo>
         });
       ;
       setState(() {});
+      return;
     }
   }
 
