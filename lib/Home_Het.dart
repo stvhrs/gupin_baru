@@ -43,8 +43,8 @@ class HalmanHet extends StatefulWidget {
   State<HalmanHet> createState() => _HalmanHetState();
 }
 
-class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixin{
-  
+class _HalmanHetState extends State<HalmanHet>
+    with AutomaticKeepAliveClientMixin {
   List<Het> listHET = [];
 
   Future<void> fetchApi() async {
@@ -52,13 +52,18 @@ class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixi
       listHET.clear();
       final dio = Dio();
       int data = list.indexOf(dropdownValue);
-      final response =
-          await dio.get("https://bupin.id/api/het?kelas=${listKelas[data]}");
+      final response = await dio.get(
+          "https://api.buku.kemdikbud.go.id/api/catalogue/getPenggerakTextBooks?limit=3000&type_pdf&order_by=updated_at");
 
       if (response.statusCode == 200) {
-        for (Map<String, dynamic> element in response.data) {
+        for (Map<String, dynamic> element in response.data["results"]) {
           log(element.toString());
-          listHET.add(Het.fromMap(element));
+          if ((element["title"] as String).contains("Panduan")) {
+           
+          }
+          else if  (int.parse((element["class"] as String)) - 1 == data) {
+            listHET.add(Het.fromMap(element));
+          }
         }
 
         setState(() {});
@@ -83,9 +88,7 @@ class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixi
     }
   }
 
-  String dropdownValue = list[int.parse(ApiService.user!.kelas) -1
-  
-  ];
+  String dropdownValue = list[int.parse(ApiService.user!.kelas) - 1];
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -275,7 +278,7 @@ class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixi
       ],
     );
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
