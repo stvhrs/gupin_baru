@@ -31,19 +31,19 @@ const List<String> list = <String>[
     if (data["id_kelas"] == '17' || data["id_kelas"] == '64') {
       kelas = daftarKelas[0];
     }
-    if (data["id_kelas"] == '48') {
+    if (data["id_kelas"] == '48' || data["id_kelas"] == '69') {
       kelas = daftarKelas[1];
     }
-    if (data["id_kelas"] == '49') {
+    if (data["id_kelas"] == '49' || data["id_kelas"] == '71') {
       kelas = daftarKelas[2];
     }
     if (data["id_kelas"] == '18' || data["id_kelas"] == '65') {
       kelas = daftarKelas[3];
     }
-    if (data["id_kelas"] == '50') {
+    if (data["id_kelas"] == '50' || data["id_kelas"] == '70') {
       kelas = daftarKelas[4];
     }
-    if (data["id_kelas"] == '51') {
+    if (data["id_kelas"] == '51' || data["id_kelas"] == '72') {
       kelas = daftarKelas[5];
     }
     if (data["id_kelas"] == '16' ||
@@ -87,7 +87,7 @@ const List<String> list = <String>[
     if (data["id_kelas"] == '48') {
       kelas = daftarKelas[1];
     }
-    if (data["id_kelas"] == '49') {
+    if (data["id_kelas"] == '49' || data["id_kelas"] == '71') {
       kelas = daftarKelas[2];
     }
     if (data["id_kelas"] == '18' || data["id_kelas"] == '65') {

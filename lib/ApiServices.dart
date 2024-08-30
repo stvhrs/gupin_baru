@@ -264,19 +264,19 @@ class ApiService {
     if (user!.idKelas == '17' || user!.idKelas == '64') {
       kelas = daftarKelas[0];
     }
-    if (user!.idKelas == '48') {
+    if (user!.idKelas == '48' || user!.idKelas == '69') {
       kelas = daftarKelas[1];
     }
-    if (user!.idKelas == '49') {
+    if (user!.idKelas == '49' || user!.idKelas == '71') {
       kelas = daftarKelas[2];
     }
     if (user!.idKelas == '18' || user!.idKelas == '65') {
       kelas = daftarKelas[3];
     }
-    if (user!.idKelas == '50') {
+    if (user!.idKelas == '50' || user!.idKelas == '70') {
       kelas = daftarKelas[4];
     }
-    if (user!.idKelas == '51') {
+    if (user!.idKelas == '51' || user!.idKelas == '72') {
       kelas = daftarKelas[5];
     }
     if (user!.idKelas == '16' ||
@@ -310,7 +310,7 @@ class ApiService {
     }
     final dio = Dio();
     final response =
-        await dio.post("https://bupin.id/api/api-mapel-to.php?kelas=$kelas");
+        await dio.get("https://bupin.id/api/api-mapel-to.php?kelas=$kelas");
     if (response.data == null || response.data.isEmpty) {
       return;
     } else {
