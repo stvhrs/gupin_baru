@@ -10,7 +10,7 @@ import 'package:Bupin/models/soal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
+
 
 class HalamanMapel extends StatefulWidget {
   final Color color;

@@ -11,7 +11,7 @@ import 'package:Bupin/widgets/enterFullSceen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pod_player/pod_player.dart';
+
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 ///
@@ -205,7 +205,7 @@ class HalamanVideoState extends State<HalamanVideo>
                                                           child: Opacity(
                                                             opacity: 0.05,
                                                             child: Image.asset(
-                                                              "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                         "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
                                                               repeat:
                                                                   ImageRepeat
                                                                       .repeatY,
@@ -229,7 +229,7 @@ class HalamanVideoState extends State<HalamanVideo>
                                                           child: Opacity(
                                                             opacity: 0.05,
                                                             child: Image.asset(
-                                                              "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                           "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
                                                               repeat:
                                                                   ImageRepeat
                                                                       .repeatY,

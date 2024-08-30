@@ -13,8 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pod_player/pod_player.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart' as ytx;
+
 import 'dart:math' as ran;
 
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -217,7 +216,7 @@ class GupinVideoState extends State<GupinVideo> with TickerProviderStateMixin {
                                                           child: Opacity(
                                                             opacity: 0.05,
                                                             child: Image.asset(
-                                                              "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                              "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
                                                               repeat:
                                                                   ImageRepeat
                                                                       .repeatY,
