@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:developer';
-
 import 'package:url_launcher/url_launcher.dart';
 
 const List<String> list = <String>[

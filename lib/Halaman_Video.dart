@@ -4,13 +4,17 @@
 
 import 'dart:developer';
 
+import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/Halaman_Laporan_Error.dart';
 import 'package:Bupin/models/Video.dart';
+import 'package:Bupin/widgets/enterFullSceen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pod_player/pod_player.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
+///
 class HalamanVideo extends StatefulWidget {
   final String link;
 
@@ -33,20 +37,15 @@ class HalamanVideoState extends State<HalamanVideo>
   @override
   void dispose() {
     _controller2.dispose();
-    controller!.dispose();
 
     super.dispose();
   }
 
-  PodPlayerController? controller;
-  @override
-  void initState() {
-    fetchApi();
-    super.initState();
-  }
-
+  double aspectRatio = 16 / 9;
+  late YoutubePlayerController _controller;
   String linkQrVideo = "";
   Video? video;
+  bool noInternet = true;
 
   Future<void> fetchApi() async {
     final dio = Dio();
@@ -57,193 +56,230 @@ class HalamanVideoState extends State<HalamanVideo>
 
     log(response.statusCode.toString());
     if (response.statusCode != 200) {
+      noInternet = true;
       return;
     }
-
+    noInternet = false;
     if (response.data[0]["ytid"] == null &&
         response.data[0]["ytidDmp"] == null) {
       return;
     } else {
       video = Video.fromMap(response.data[0]);
-      controller = PodPlayerController(
-        playVideoFrom: PlayVideoFrom.youtube(video!.ytId!, live: false),
-        podPlayerConfig: const PodPlayerConfig(
-          videoQualityPriority: [720, 360],
-          autoPlay: true,
-        ),
-      )..initialise().catchError((e) {
-          log(e.toString());
-          log("error");
-          fetchApi();
-        });
-      ;
-      setState(() {});
-      return;
+    }
+    if (video != null) {
+      _controller = YoutubePlayerController(
+        params: const YoutubePlayerParams(
+            mute: false,
+            showFullscreenButton: true,
+            color: "red",
+            loop: false,
+            strictRelatedVideos: true),
+      );
+
+      _controller.setFullScreenListener(
+        (isFullScreen) {},
+      );
+
+      _controller.loadVideo(video!.linkVideo!);
+
+      final isVertical = await ApiService.isVertical(video!);
+
+      if (isVertical) {
+        aspectRatio = 9 / 16;
+      } else {
+        aspectRatio = 16 / 9;
+      }
     }
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    log("Video");
+    // ignore: deprecated_member_use
     return WillPopScope(
-        onWillPop: () {
-          Navigator.pop(context, false);
-
-          controller!.pause();
-
-          return Future.value(true);
-        },
-        child: (controller == null)
-            ? Scaffold(
-                appBar: AppBar(
-                  leading: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: GestureDetector(
-                        onTap: () {
-                          controller!.pause();
-                          Navigator.pop(context, false);
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Center(
-                            child: Icon(
-                              Icons.arrow_back_rounded,
-                              color: Theme.of(context).primaryColor,
-                              size: 15,
-                              weight: 100,
-                            ),
-                          ),
-                        )),
-                  ),
-                  centerTitle: true,
-                  automaticallyImplyLeading: false,
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
-                backgroundColor: Colors.white,
-                body: Stack(alignment: Alignment.center, children: [
-                  Container(
-                    color: Colors.black,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width * 9 / 16,
-                  ),
-                  Image.asset(
-                    "asset/logo.png",
-                    width: MediaQuery.of(context).size.width * 0.5,
-                  ),
-                ]))
-            : video == null
-                ? HalamanLaporan(
-                    linkQrVideo.replaceAll(
-                      "https://bupin.id/api/apibarang.php?kodeQR=",
-                      "",
-                    ),
-                  )
-                : Scaffold(
-                    backgroundColor: Colors.white,
+      onWillPop: () {
+        Navigator.pop(context, false);
+        if (noInternet == false) {
+          _controller.stopVideo();
+        }
+        return Future.value(true);
+      },
+      child: FutureBuilder<void>(
+          future: fetchApi(),
+          builder: (context, snapshot) {
+            return (noInternet == true)
+                ? Scaffold(
                     appBar: AppBar(
                       centerTitle: true,
-                      leading: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context, false);
-                            },
-                            child: CircleAvatar(
+                      automaticallyImplyLeading: false,
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                    backgroundColor: Colors.white,
+                    body: Center(
+                        child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                      backgroundColor: const Color.fromRGBO(236, 180, 84, 1),
+                    )),
+                  )
+                : video == null
+                    ? HalamanLaporan(
+                        linkQrVideo.replaceAll(
+                          "https://bupin.id/api/apibarang.php?kodeQR=",
+                          "",
+                        ),
+                      )
+                    : YoutubePlayerScaffold(
+                        backgroundColor: Colors.black,
+                        aspectRatio: aspectRatio,
+                        controller: _controller,
+                        builder: (context, player) {
+                          return Scaffold(
                               backgroundColor: Colors.white,
-                              child: Center(
-                                child: Icon(
-                                  Icons.arrow_back_rounded,
-                                  color: Theme.of(context).primaryColor,
-                                  size: 15,
-                                  weight: 100,
+                              appBar: AppBar(
+                                centerTitle: true,
+                                leading: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        _controller.stopVideo();
+                                        // _controller.close();
+                                        Navigator.pop(context, false);
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.arrow_back_rounded,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            size: 15,
+                                            weight: 100,
+                                          ),
+                                        ),
+                                      )),
+                                ),
+                                backgroundColor: Theme.of(context).primaryColor,
+                                title: Text(
+                                  video!.namaVideo!,
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700),
                                 ),
                               ),
-                            )),
-                      ),
-                      backgroundColor: Theme.of(context).primaryColor,
-                      title: Text(
-                        video!.namaVideo!,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                    body: SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          Stack(
-                              clipBehavior: Clip.none,
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  color: Colors.black,
-                                  width: MediaQuery.of(context).size.width,
-                                  height: MediaQuery.of(context).size.width *
-                                      9 /
-                                      16,
-                                ),
-                                Image.asset(
-                                  "asset/logo.png",
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                ),
-                                FadeTransition(
-                                  opacity: _animation,
-                                  child: PodVideoPlayer(
-                                    controller: controller!,
-                                    onVideoError: () {
-                                      log("steve");
-                                      fetchApi();
-                                      return Text("Loading....");
-                                    },
-                                    matchFrameAspectRatioToVideo: true,
-                                    matchVideoAspectRatioToFrame: true,
-                                    onToggleFullScreen: (isFullScreen) {
-                                      if (controller!.videoPlayerValue!.size
-                                              .aspectRatio ==
-                                          1.7777777777777777) {
-                                        if (!isFullScreen) {
-                                          SystemChrome.setPreferredOrientations(
-                                              [DeviceOrientation.portraitUp]);
-                                        } else {
-                                          SystemChrome
-                                              .setPreferredOrientations([
-                                            DeviceOrientation.landscapeLeft
-                                          ]);
-                                          if (controller!.isFullScreen) {
-                                          } else {
-                                            SystemChrome.setEnabledSystemUIMode(
-                                                SystemUiMode.leanBack);
-                                          }
-                                        }
-
-                                        return Future.delayed(
-                                            Duration(microseconds: 0));
-                                      } else {
-                                        return Future.delayed(
-                                          Duration(microseconds: 0),
-                                          () {
-                                            if (controller!.isFullScreen) {
-                                            } else {
-                                              SystemChrome
-                                                  .setEnabledSystemUIMode(
-                                                      SystemUiMode.leanBack);
-                                            }
-                                          },
-                                        );
-                                      }
-                                    },
-                                  ),
-                                )
-                              ]),
-                          Image.asset(
-                            "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-                            width: MediaQuery.of(context).size.width,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ],
-                      ),
-                    )));
+                              body: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  return Column(
+                                    children: [
+                                      Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Image.asset(
+                                              "asset/logo.png",
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5,
+                                            ),
+                                            FadeTransition(
+                                                opacity: _animation,
+                                                child: player)
+                                          ]),
+                                      aspectRatio == 9 / 16
+                                          ? const SizedBox()
+                                          : Expanded(
+                                              child: Stack(
+                                                alignment: Alignment.topCenter,
+                                                children: [
+                                                  Container(
+                                                    color: Colors.white,
+                                                  ),
+                                                  aspectRatio == 9 / 16
+                                                      ? const SizedBox()
+                                                      : Positioned.fill(
+                                                          child: Opacity(
+                                                            opacity: 0.05,
+                                                            child: Image.asset(
+                                                              "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                              repeat:
+                                                                  ImageRepeat
+                                                                      .repeatY,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              fit: BoxFit
+                                                                  .fitWidth,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                  aspectRatio == 9 / 16
+                                                      ? const SizedBox()
+                                                      : Positioned.fill(
+                                                          top: 0,
+                                                          child: Opacity(
+                                                            opacity: 0.05,
+                                                            child: Image.asset(
+                                                              "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                              repeat:
+                                                                  ImageRepeat
+                                                                      .repeatY,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              fit: BoxFit
+                                                                  .fitWidth,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 0.0),
+                                                    child: PlayPauseButtonBar(),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                    ],
+                                  );
+                                },
+                              ));
+                        },
+                      );
+          }),
+    );
   }
 }
+
+class Controls extends StatelessWidget {
+  const Controls({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          PlayPauseButtonBar(),
+        ],
+      ),
+    );
+  }
+}
+
+///

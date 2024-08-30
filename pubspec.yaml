@@ -42,12 +42,12 @@ dependencies:
   flutter_carousel_widget: ^2.2.0
   timeline_tile: ^2.0.0  
   http: ^1.2.1   
-  pod_player: ^0.2.2  
   shared_preferences: ^2.2.3
   rounded_loading_button_plus: ^3.0.1
   flutter_cached_pdfview: ^0.4.2
   share_plus: ^9.0.0
   printing: ^5.12.0
+  youtube_player_iframe: ^5.1.3
   
 
    
