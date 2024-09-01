@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/HalamanVideoGupin.dart';
 import 'package:Bupin/Halaman_Video.dart';
@@ -36,8 +38,9 @@ class _VideoItemState extends State<VideoItem> {
               onTap: widget.judul == ""
                   ? () {}
                   : () {
+                    log(widget.video.ytId!);
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => GupinVideo(
+                        builder: (context) => GupinVideo(widget.video.ytId!,
                           widget.video.linkVideo!,
                           widget.color,
                           widget.judul.toTitleCase(),

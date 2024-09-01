@@ -176,7 +176,7 @@ class HalamanBelajar extends StatelessWidget {
                         ), InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => GupinVideo(
+                              builder: (context) => GupinVideo("4KEs7FhZWQw",
                                   "https://www.youtube.com/watch?v=4KEs7FhZWQw",
                                   Theme.of(context).primaryColor,
                                   "Product Knowledge Gupin"),

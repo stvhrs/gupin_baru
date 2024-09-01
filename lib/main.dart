@@ -3,15 +3,13 @@ import 'package:Bupin/Halaman_Login.dart';
 import 'package:Bupin/Home.dart';
 import 'package:Bupin/loadingScreen.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pod_player/pod_player.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //PodVideoPlayer.enableLogs = true;
-SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
@@ -51,11 +49,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.dark,
-        theme: ThemeData( pageTransitionsTheme: const PageTransitionsTheme(
-      builders: <TargetPlatform, PageTransitionsBuilder>{
-        TargetPlatform.android: CupertinoPageTransitionsBuilder(), // Apply this to every platforms you need.
-      },
-    ),
+        theme: ThemeData(
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: <TargetPlatform, PageTransitionsBuilder>{
+                TargetPlatform.android:
+                    CupertinoPageTransitionsBuilder(), // Apply this to every platforms you need.
+              },
+            ),
             inputDecorationTheme: InputDecorationTheme(
               hintStyle: TextStyle(
                 color: Color.fromARGB(255, 48, 47, 114).withOpacity(0.7),
@@ -89,10 +89,16 @@ class _MyAppState extends State<MyApp> {
                 backgroundColor: Color.fromARGB(255, 48, 47, 114),
                 actionsIconTheme: IconThemeData(color: Colors.white)),
             fontFamily: 'Nunito',
-            textTheme:
-                 TextTheme(titleMedium: TextStyle(fontFamily: "Nunito",color: Colors.white,),bodyMedium: TextStyle(
-        color: Colors.grey.shade900,fontWeight: FontWeight.w500,
-      ),),
+            textTheme: TextTheme(
+              titleMedium: TextStyle(
+                fontFamily: "Nunito",
+                color: Colors.white,
+              ),
+              bodyMedium: TextStyle(
+                color: Colors.grey.shade900,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             scaffoldBackgroundColor: Color.fromARGB(255, 48, 47, 114),
             colorScheme: ColorScheme.fromSwatch().copyWith(
               secondary: const Color.fromRGBO(236, 180, 84, 1),

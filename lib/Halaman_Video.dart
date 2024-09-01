@@ -82,7 +82,7 @@ class HalamanVideoState extends State<HalamanVideo>
 
       _controller.loadVideo(video!.linkVideo!);
 
-      final isVertical = await ApiService.isVertical(video!);
+      final isVertical = await ApiService.isVertical(video!.ytId!);
 
       if (isVertical) {
         aspectRatio = 9 / 16;

@@ -110,11 +110,12 @@ class ApiService {
         as String);
   }
 
-  static Future<bool> isVertical(Video video) async {
+  static Future<bool> isVertical(String video) async {
+      log(video);
     final dio = Dio();
     final response = await dio.get(
-        "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${video.ytId}&key=AIzaSyDgsDwiV1qvlNa7aes8aR1KFzRSWLlP6Bw");
-
+        "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${video}&key=AIzaSyDgsDwiV1qvlNa7aes8aR1KFzRSWLlP6Bw");
+    log(response.data["items"].toString());
     if ((response.data["items"][0]["snippet"]["localized"]["description"]
             as String)
         .contains("ctv")) {

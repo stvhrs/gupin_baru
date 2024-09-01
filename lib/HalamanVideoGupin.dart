@@ -21,10 +21,11 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 ///
 class GupinVideo extends StatefulWidget {
   final String link;
+  final String ytId;
   final String judul;
   final Color color;
 
-  const GupinVideo(this.link, this.color, this.judul, {super.key});
+  const GupinVideo(this.ytId, this.link, this.color, this.judul, {super.key});
   @override
   GupinVideoState createState() => GupinVideoState();
 }
@@ -48,57 +49,51 @@ class GupinVideoState extends State<GupinVideo> with TickerProviderStateMixin {
 
   double aspectRatio = 16 / 9;
   late YoutubePlayerController _controller;
-  String linkQrVideo = "";
-  Video? video;
+
   bool noInternet = true;
+  String? _getYoutubeVideoIdByURL (String url) {
+    final regex = RegExp(r'.*\?v=(.+?)($|[\&])', caseSensitive: false);
 
+    try {
+      if (regex.hasMatch(url)) {
+        return regex.firstMatch(url)!.group(1);
+      }
+    } catch (e) {
+      return null;
+    }
+  }
   Future<void> fetchApi() async {
-    final dio = Dio();
+    _controller = YoutubePlayerController(
+      params: const YoutubePlayerParams(
+          mute: false,
+          showFullscreenButton: true,
+          color: "red",
+          loop: false,
+          strictRelatedVideos: true),
+    );
 
-    linkQrVideo = widget.link
-        .replaceAll("buku.bupin.id/?", "bupin.id/api/apibarang.php?kodeQR=");
-    final response = await dio.get(linkQrVideo);
+    _controller.setFullScreenListener(
+      (isFullScreen) {},
+    );
 
-    log(response.statusCode.toString());
-    if (response.statusCode != 200) {
-      noInternet = true;
-      return;
+     _controller.loadVideo(widget.link);
+
+    final isVertical =
+        await ApiService.isVertical(_getYoutubeVideoIdByURL(widget.link).toString());
+
+    if (isVertical) {
+      aspectRatio = 9 / 16;
+    } else {
+      aspectRatio = 16 / 9;
     }
     noInternet = false;
-    if (response.data[0]["ytid"] == null &&
-        response.data[0]["ytidDmp"] == null) {
-      return;
-    } else {
-      video = Video.fromMap(response.data[0]);
-    }
-    if (video != null) {
-      _controller = YoutubePlayerController(
-        params: const YoutubePlayerParams(
-            mute: false,
-            showFullscreenButton: true,
-            color: "red",
-            loop: false,
-            strictRelatedVideos: true),
-      );
-
-      _controller.setFullScreenListener(
-        (isFullScreen) {},
-      );
-
-      _controller.loadVideo(video!.linkVideo!);
-
-      final isVertical = await ApiService.isVertical(video!);
-
-      if (isVertical) {
-        aspectRatio = 9 / 16;
-      } else {
-        aspectRatio = 16 / 9;
-      }
-    }
+    setState(() {});
+    return;
   }
 
   @override
   void initState() {
+    fetchApi();
     super.initState();
   }
 
@@ -107,172 +102,147 @@ class GupinVideoState extends State<GupinVideo> with TickerProviderStateMixin {
     log("Video");
     // ignore: deprecated_member_use
     return WillPopScope(
-      onWillPop: () {
-        Navigator.pop(context, false);
-        if (noInternet == false) {
-          _controller.stopVideo();
-        }
-        return Future.value(true);
-      },
-      child: FutureBuilder<void>(
-          future: fetchApi(),
-          builder: (context, snapshot) {
-            return (noInternet == true)
-                ? Scaffold(
-                    appBar: AppBar(
-                      title: Text(
-                        widget.judul,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      centerTitle: true,
-                      automaticallyImplyLeading: false,
-                      backgroundColor: widget.color,
-                    ),
-                    backgroundColor: Colors.white,
-                    body: Center(
-                        child: CircularProgressIndicator(
-                      color: widget.color,
-                      backgroundColor: const Color.fromRGBO(236, 180, 84, 1),
-                    )),
-                  )
-                : video == null
-                    ? HalamanLaporan(
-                        linkQrVideo.replaceAll(
-                          "https://bupin.id/api/apibarang.php?kodeQR=",
-                          "",
+        onWillPop: () {
+          Navigator.pop(context, false);
+          if (noInternet == false) {
+            _controller.stopVideo();
+          }
+          return Future.value(true);
+        },
+        child: (noInternet == true)
+            ? Scaffold(
+                appBar: AppBar(
+                  title: Text(
+                    widget.judul,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  centerTitle: true,
+                  automaticallyImplyLeading: false,
+                  backgroundColor: widget.color,
+                ),
+                backgroundColor: Colors.white,
+                body: Center(
+                    child: CircularProgressIndicator(
+                  color: widget.color,
+                  backgroundColor: const Color.fromRGBO(236, 180, 84, 1),
+                )),
+              )
+            : YoutubePlayerScaffold(
+                backgroundColor: Colors.black,
+                aspectRatio: aspectRatio,
+                controller: _controller,
+                builder: (context, player) {
+                  return Scaffold(
+                      backgroundColor: Colors.white,
+                      appBar: AppBar(
+                        centerTitle: true,
+                        leading: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: GestureDetector(
+                              onTap: () {
+                                _controller.stopVideo();
+                                // _controller.close();
+                                Navigator.pop(context, false);
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_back_rounded,
+                                    color: widget.color,
+                                    size: 15,
+                                    weight: 100,
+                                  ),
+                                ),
+                              )),
                         ),
-                      )
-                    : YoutubePlayerScaffold(
-                        backgroundColor: Colors.black,
-                        aspectRatio: aspectRatio,
-                        controller: _controller,
-                        builder: (context, player) {
-                          return Scaffold(
-                              backgroundColor: Colors.white,
-                              appBar: AppBar(
-                                centerTitle: true,
-                                leading: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        _controller.stopVideo();
-                                        // _controller.close();
-                                        Navigator.pop(context, false);
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.arrow_back_rounded,
-                                            color: widget.color,
-                                            size: 15,
-                                            weight: 100,
+                        backgroundColor: widget.color,
+                        title: Text(
+                          widget.judul,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      body: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return Column(
+                            children: [
+                              Stack(alignment: Alignment.center, children: [
+                                Image.asset(
+                                  "asset/logo.png",
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                ),
+                                FadeTransition(
+                                    opacity: _animation, child: player)
+                              ]),
+                              aspectRatio == 9 / 16
+                                  ? const SizedBox()
+                                  : Expanded(
+                                      child: Stack(
+                                        alignment: Alignment.topCenter,
+                                        children: [
+                                          Container(
+                                            color: Colors.white,
                                           ),
-                                        ),
-                                      )),
-                                ),
-                                backgroundColor: widget.color,
-                                title: Text(
-                                  video!.namaVideo!,
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                              body: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return Column(
-                                    children: [
-                                      Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Image.asset(
-                                              "asset/logo.png",
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5,
-                                            ),
-                                            FadeTransition(
-                                                opacity: _animation,
-                                                child: player)
-                                          ]),
-                                      aspectRatio == 9 / 16
-                                          ? const SizedBox()
-                                          : Expanded(
-                                              child: Stack(
-                                                alignment: Alignment.topCenter,
-                                                children: [
-                                                  Container(
-                                                    color: Colors.white,
+                                          aspectRatio == 9 / 16
+                                              ? const SizedBox()
+                                              : Positioned.fill(
+                                                  child: Opacity(
+                                                    opacity: 0.05,
+                                                    child: Image.asset(
+                                                      "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
+                                                      repeat:
+                                                          ImageRepeat.repeatY,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      fit: BoxFit.fitWidth,
+                                                    ),
                                                   ),
-                                                  aspectRatio == 9 / 16
-                                                      ? const SizedBox()
-                                                      : Positioned.fill(
-                                                          child: Opacity(
-                                                            opacity: 0.05,
-                                                            child: Image.asset(
-                                                              "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-                                                              repeat:
-                                                                  ImageRepeat
-                                                                      .repeatY,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColor,
-                                                              width:
-                                                                  MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width,
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                  aspectRatio == 9 / 16
-                                                      ? const SizedBox()
-                                                      : Positioned.fill(
-                                                          top: 0,
-                                                          child: Opacity(
-                                                            opacity: 0.05,
-                                                            child: Image.asset(
-                                                              "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
-                                                              repeat:
-                                                                  ImageRepeat
-                                                                      .repeatY,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColor,
-                                                              width:
-                                                                  MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width,
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 0.0),
-                                                    child: PlayPauseButtonBar(),
+                                                ),
+                                          aspectRatio == 9 / 16
+                                              ? const SizedBox()
+                                              : Positioned.fill(
+                                                  top: 0,
+                                                  child: Opacity(
+                                                    opacity: 0.05,
+                                                    child: Image.asset(
+                                                      "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                      repeat:
+                                                          ImageRepeat.repeatY,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      fit: BoxFit.fitWidth,
+                                                    ),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                    ],
-                                  );
-                                },
-                              ));
+                                                ),
+                                          const Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 0.0),
+                                            child: PlayPauseButtonBar(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                            ],
+                          );
                         },
-                      );
-          }),
-    );
+                      ));
+                },
+              ));
   }
 }
 
