@@ -4,6 +4,6 @@ class Het {
 final String pdf;
   Het(this.namaBuku, this.imgUrl,this.pdf);
   factory Het.fromMap(Map<String, dynamic> data) {
-    return Het(data["title"], data["image"],data["attachment"]);
+    return Het(data["judul"], data["cover"],data["pdf"]);
   }
 }
