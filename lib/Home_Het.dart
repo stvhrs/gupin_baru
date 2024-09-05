@@ -43,13 +43,12 @@ class HalmanHet extends StatefulWidget {
   State<HalmanHet> createState() => _HalmanHetState();
 }
 
-class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixin{
-  
+class _HalmanHetState extends State<HalmanHet>
+    with AutomaticKeepAliveClientMixin {
   List<Het> listHET = [];
 
   Future<void> fetchApi() async {
     try {
-      
       listHET.clear();
       final dio = Dio();
       int data = list.indexOf(dropdownValue);
@@ -64,7 +63,6 @@ class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixi
 
         setState(() {});
       }
-
     } catch (e) {
       log("errrorrr");
     }
@@ -85,9 +83,11 @@ class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixi
     }
   }
 
-  String dropdownValue = list[int.parse(ApiService.user!.kelas) -1
-  
-  ];
+  String dropdownValue = (int.tryParse(ApiService.user!.kelas) ?? 0) > 0 &&
+          (int.tryParse(ApiService.user!.kelas) ?? 0) <= list.length
+      ? list[int.parse(ApiService.user!.kelas) - 1]
+      : list[0];
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -249,7 +249,7 @@ class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixi
                             ),
                           ),
                           AnimatedOpacity(
-                            duration: Duration(milliseconds: 1000),
+                            duration: const Duration(milliseconds: 1000),
                             opacity: listHET.isEmpty ? 0 : 1,
                             child: Center(
                                 child: Padding(
@@ -277,7 +277,7 @@ class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixi
       ],
     );
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
