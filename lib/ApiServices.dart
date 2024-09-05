@@ -248,7 +248,7 @@ class ApiService {
 
     if (credential != null) {
       user = User.fromMap(jsonDecode(credential));
-
+log(credential.toString());
       await getMapel();
       await getTo();
       return true;
@@ -261,7 +261,7 @@ class ApiService {
   Future<void> getTo() async {
     var daftarKelas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     int kelas = 0;
-
+log(user!.idKelas);
     if (user!.idKelas == '17' || user!.idKelas == '64') {
       kelas = daftarKelas[0];
     }

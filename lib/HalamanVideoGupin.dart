@@ -163,7 +163,7 @@ class GupinVideoState extends State<GupinVideo> with TickerProviderStateMixin {
                         title: Text(
                           widget.judul,
                           style: const TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 15,
                               fontWeight: FontWeight.w700),
                         ),
@@ -209,32 +209,20 @@ class GupinVideoState extends State<GupinVideo> with TickerProviderStateMixin {
                                                     ),
                                                   ),
                                                 ),
-                                          aspectRatio == 9 / 16
-                                              ? const SizedBox()
-                                              : Positioned.fill(
-                                                  top: 0,
-                                                  child: Opacity(
-                                                    opacity: 0.05,
-                                                    child: Image.asset(
-                                                      "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
-                                                      repeat:
-                                                          ImageRepeat.repeatY,
-                                                      color: Theme.of(context)
-                                                          .primaryColor,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      fit: BoxFit.fitWidth,
-                                                    ),
-                                                  ),
-                                                ),
-                                          const Padding(
+                                         
+                                           Padding(
                                             padding:
                                                 EdgeInsets.only(right: 0.0),
-                                            child: PlayPauseButtonBar(),
-                                          ),
-                                        ],
+                                            child:  Padding(
+      padding: EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          PlayPauseButtonBar(widget.color)
+        ],
+      ),
+                                            ),
+                                      )],
                                       ),
                                     ),
                             ],
@@ -246,21 +234,5 @@ class GupinVideoState extends State<GupinVideo> with TickerProviderStateMixin {
   }
 }
 
-class Controls extends StatelessWidget {
-  const Controls({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PlayPauseButtonBar(),
-        ],
-      ),
-    );
-  }
-}
 
 ///

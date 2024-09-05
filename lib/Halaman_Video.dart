@@ -249,7 +249,7 @@ class HalamanVideoState extends State<HalamanVideo>
                                                   const Padding(
                                                     padding: EdgeInsets.only(
                                                         right: 0.0),
-                                                    child: PlayPauseButtonBar(),
+                                                    child: PlayPauseButtonBar( Color.fromARGB(255, 48, 47, 114)),
                                                   ),
                                                 ],
                                               ),
@@ -275,7 +275,7 @@ class Controls extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PlayPauseButtonBar(),
+          PlayPauseButtonBar( Color.fromARGB(255, 48, 47, 114)),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/models/Het.dart';
+import 'package:Bupin/models/helper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -85,7 +86,7 @@ class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixi
     }
   }
 
-  String dropdownValue = list[int.parse(ApiService.user!.kelas) -1
+  String dropdownValue = list[Helper().getIndex(ApiService.user!.idKelas)-1
   
   ];
   @override

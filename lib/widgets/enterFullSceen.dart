@@ -8,8 +8,8 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 ///
 class PlayPauseButtonBar extends StatelessWidget {
 
-
-  const PlayPauseButtonBar({super.key});
+final Color color;
+  const PlayPauseButtonBar(this.color);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -31,7 +31,7 @@ class PlayPauseButtonBar extends StatelessWidget {
                 Text(
                   "Fullscreen",
                   style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: color,
                       fontWeight: FontWeight.w700),
                 ),
                 Padding(
@@ -39,7 +39,7 @@ class PlayPauseButtonBar extends StatelessWidget {
                   child: Icon(
                     Icons.fullscreen_rounded,
                     weight: 20,
-                    color: Theme.of(context).primaryColor,
+                    color: color,
                   ),
                 ),
               ],
