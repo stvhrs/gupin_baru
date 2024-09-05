@@ -163,7 +163,7 @@ class GupinVideoState extends State<GupinVideo> with TickerProviderStateMixin {
                         title: Text(
                           widget.judul,
                           style: const TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 15,
                               fontWeight: FontWeight.w700),
                         ),
@@ -216,7 +216,7 @@ class GupinVideoState extends State<GupinVideo> with TickerProviderStateMixin {
                                                   child: Opacity(
                                                     opacity: 0.05,
                                                     child: Image.asset(
-                                                      "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                      "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
                                                       repeat:
                                                           ImageRepeat.repeatY,
                                                       color: Theme.of(context)
