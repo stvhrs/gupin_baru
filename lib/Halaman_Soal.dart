@@ -203,7 +203,6 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                   Provider.of<CameraProvider>(context,
                                           listen: false)
                                       .scaning = false;
-                                  recentSoal();
 
                                   Navigator.of(context).pop();
                                 },
