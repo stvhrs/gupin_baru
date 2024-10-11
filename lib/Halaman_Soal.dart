@@ -59,6 +59,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
   List<WiidgetOption> listSelectedOption = [];
   bool loading = true;
   WiidgetOption? _selcteed;
+   WiidgetOption? _beforeSelected;
   @override
   void initState() {
     getUjian();
@@ -102,7 +103,13 @@ class _HalamanSoalState extends State<HalamanSoal> {
                             );
                             setState(() {
                               _questionNumber--;
+                              _selcteed =_beforeSelected;
                             });
+                          } else {
+                            Navigator.of(context).pop();
+                            Provider.of<CameraProvider>(context, listen: false)
+                                .scaning = false;
+                           
                           }
                         },
                         child: Text(
@@ -145,6 +152,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                 );
                                 setState(() {
                                   _questionNumber++;
+                                  _beforeSelected=_selcteed;
                                   _selcteed = null;
                                 });
                               } else {
@@ -154,9 +162,9 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                     builder: (context) => HalamanPDFSoalState(
                                         data!,
                                         data!.namaBab,
-                                       
+                                      ),
                                   ),
-                                ));
+                                );
                               }
                             },
                       child: Text(
@@ -195,7 +203,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                   Provider.of<CameraProvider>(context,
                                           listen: false)
                                       .scaning = false;
-                               
+                                  recentSoal();
 
                                   Navigator.of(context).pop();
                                 },
@@ -302,7 +310,10 @@ class _HalamanSoalState extends State<HalamanSoal> {
                               .map(
                                 (e) => e.contains("image/png")
                                     ? Base64Image(e)
-                                    : Text(e,style: TextStyle(fontSize: 16),),
+                                    : Text(
+                                        e,
+                                        style: TextStyle(fontSize: 16),
+                                      ),
                               )
                               .toList(),
                           const SizedBox(
@@ -366,7 +377,9 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                                     ? Base64Image(
                                                         questionOption.text!)
                                                     : Text(
-                                                        questionOption.text!,style: TextStyle(fontSize: 16),
+                                                        questionOption.text!,
+                                                        style: TextStyle(
+                                                            fontSize: 16),
                                                       ),
                                               ),
                                             ),
