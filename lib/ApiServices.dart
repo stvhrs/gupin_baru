@@ -3,12 +3,14 @@ import 'dart:developer';
 
 import 'package:Bupin/Halaman_Soal.dart';
 import 'package:Bupin/Halaman_Video.dart';
+import 'package:Bupin/PageTransitionTheme.dart';
 import 'package:Bupin/models/Het.dart';
 import 'package:Bupin/models/Mapel.dart';
 import 'package:Bupin/models/To.dart';
 import 'package:Bupin/models/User.dart';
 import 'package:Bupin/models/Video.dart';
 import 'package:Bupin/models/soal.dart';
+import 'package:Bupin/models/soal_scan.dart' as v2;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -111,7 +113,7 @@ class ApiService {
   }
 
   static Future<bool> isVertical(String video) async {
-      log(video);
+    log(video);
     final dio = Dio();
     final response = await dio.get(
         "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${video}&key=AIzaSyDgsDwiV1qvlNa7aes8aR1KFzRSWLlP6Bw");
@@ -126,84 +128,49 @@ class ApiService {
     }
   }
 
-  Future<bool> pushToVideo(String link, BuildContext context) async {
-    return await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => HalamanVideo(
-        link,
+ 
+  static Future<v2.Quiz> getUjian(String link) async {
+    log(link);
+    final dio = Dio();
+    String newLink =
+        link.replaceRange(0, 22, "https://buku.bupin.id/api/ujn.php");
+    log(newLink);
+    final response = await dio.get(newLink);
+
+    String jenjang = "sd";
+    if ((response.data["namaKelas"] as String).contains("SD")) {
+      jenjang = "sd";
+    }
+    if ((response.data["namaKelas"] as String).contains("SMP")) {
+      jenjang = "smp";
+    }
+    if ((response.data["namaKelas"] as String).contains("SMA")) {
+      jenjang = "sma";
+    }
+    final response2 = await dio.get(
+        "https://cbt.api.bupin.id/api/mapel/${response.data["idUjian"]}?level=$jenjang");
+
+    return v2.Quiz.fromMap(response.data, response2.data);
+  }
+
+  
+  pushToVideo(String link, BuildContext context) {
+    Navigator.of(context).push(CustomRoute(
+      builder: (context) => HalamanVideo(link),
+    ));
+    return;
+  }
+
+  pushToCbt(String scanResult, BuildContext context) {
+    log(scanResult);
+     Navigator.of(context).push(CustomRoute(
+      builder: (context) => HalamanSoal(
+        link: scanResult,
       ),
     ));
+    return;
   }
-
-  Future<bool> pushToCbt(
-      String scanResult, String jenjang, BuildContext context) async {
-    return await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => HalamanSoal(
-          scanResult,
-          jenjang == "cbtsd"
-              ? "Soal SD/MI"
-              : jenjang == "cbtsmp"
-                  ? "Soal SMP/MI"
-                  : "Soal SMA/MA",
-          true,
-          jenjang),
-    ));
-  }
-
-  Future<bool> scanQrCbt(String link, BuildContext context) async {
-    String jenjangCbt = "";
-
-    jenjangCbt = link.replaceAll("buku.bupin.id/?", "");
-
-    int kodeTingkat = int.parse(jenjangCbt[jenjangCbt.indexOf(".") + 1] +
-        jenjangCbt[jenjangCbt.indexOf(".") + 2]);
-
-    String jenjang = "cbtsd";
-
-    if (kodeTingkat == 15 ||
-        kodeTingkat == 20 ||
-        kodeTingkat == 26 ||
-        kodeTingkat == 27 ||
-        kodeTingkat == 28 ||
-        kodeTingkat == 36 ||
-        kodeTingkat == 40) {
-      jenjang = "cbtsd";
-    }
-    if (kodeTingkat == 16 ||
-        kodeTingkat == 17 ||
-        kodeTingkat == 22 ||
-        kodeTingkat == 24 ||
-        kodeTingkat == 29 ||
-        kodeTingkat == 31 ||
-        kodeTingkat == 33 ||
-        kodeTingkat == 34 ||
-        kodeTingkat == 37) {
-      jenjang = "cbtsmp";
-    }
-    {
-      jenjang = "cbtsma";
-    }
-
-    int? ujianId;
-
-    List<String> parts = link.split("-");
-
-    if (parts.length >= 2) {
-      String numberString = parts[1];
-
-      ujianId = int.tryParse(numberString) ?? 0;
-    }
-    {}
-
-    if (jenjang == "cbtsd") {
-      link = "https://cbtsd.bupin.id/login.php?$ujianId";
-    }
-    {
-      link = "https://tim.bupin.id/$jenjang/login.php?$ujianId";
-    }
-
-    return await pushToCbt(link, jenjang, context);
-  }
-
+ 
   Future<bool> scanQrVideo(String link, BuildContext context) async {
     return await pushToVideo(link, context);
   }
@@ -248,7 +215,7 @@ class ApiService {
 
     if (credential != null) {
       user = User.fromMap(jsonDecode(credential));
-log(credential.toString());
+      log(credential.toString());
       await getMapel();
       await getTo();
       return true;
@@ -261,7 +228,7 @@ log(credential.toString());
   Future<void> getTo() async {
     var daftarKelas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     int kelas = 0;
-log(user!.idKelas);
+    log(user!.idKelas);
     if (user!.idKelas == '17' || user!.idKelas == '64') {
       kelas = daftarKelas[0];
     }
@@ -399,7 +366,7 @@ log(user!.idKelas);
       return [];
     } else {
       List<WidgetQuestion> tempListTo = [];
-
+      log(response.data.toString());
       for (var element in response.data["results"]) {
         tempListTo.add(WidgetQuestion.fromMap(element));
       }

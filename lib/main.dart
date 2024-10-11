@@ -1,10 +1,12 @@
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/Halaman_Login.dart';
 import 'package:Bupin/Home.dart';
+import 'package:Bupin/camera_provider.dart';
 import 'package:Bupin/loadingScreen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +20,15 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  return runApp(MyApp());
+  return runApp(MultiProvider(
+      providers: [
+         ChangeNotifierProvider(
+          create: (context) => CameraProvider(),
+        ),
+       
+      ],
+      child: const MyApp(),
+    ),);;
 }
 
 class MyApp extends StatefulWidget {

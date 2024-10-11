@@ -109,8 +109,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               left: 10,
                               right: 10,
                             ),
-                            child: Flexible(
-                              child: Text(
+                            child:  Text(
                                 "${widget.topicType.toTitleCase()}",
                                 style: Theme.of(context)
                                     .textTheme
@@ -121,7 +120,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                         fontWeight: FontWeight.w400),
                                 overflow: TextOverflow.ellipsis,
                               ),
-                            ),
+                            
                           ),
                         ],
                       ),
