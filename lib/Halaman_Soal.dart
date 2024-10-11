@@ -73,26 +73,24 @@ class _HalamanSoalState extends State<HalamanSoal> {
     setState(() {});
   }
 
+
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () {
         Provider.of<CameraProvider>(context, listen: false).scaning = false;
+       
         Navigator.of(context).pop();
         return Future.value(true);
       },
       child: Scaffold(
-        bottomNavigationBar: Container(
-          padding: EdgeInsets.only(bottom: 50),
-          color: Colors.white,
-          child: loading
-              ? Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ))
-              : Row(
+        bottomNavigationBar: loading
+            ? SizedBox()
+            : Container(
+                padding: EdgeInsets.only(bottom: 50),
+                color: Colors.white,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
@@ -124,10 +122,57 @@ class _HalamanSoalState extends State<HalamanSoal> {
                           ),
                           elevation: MaterialStateProperty.all(4),
                         )),
-                    buildElevatedButton(_selcteed),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(_selcteed == null
+                                ? Colors.grey
+                                : _questionNumber < data!.questions.length
+                                    ? Theme.of(context).primaryColor
+                                    : Colors.green),
+                        fixedSize: MaterialStateProperty.all(
+                          Size(MediaQuery.sizeOf(context).width * 0.40, 40),
+                        ),
+                        elevation: MaterialStateProperty.all(4),
+                      ),
+                      onPressed: _selcteed == null
+                          ? null
+                          : () {
+                              if (_questionNumber < data!.questions.length) {
+                                _controller.nextPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                                setState(() {
+                                  _questionNumber++;
+                                  _selcteed = null;
+                                });
+                              } else {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HalamanPDFSoalState(
+                                        data!,
+                                        data!.namaBab,
+                                       
+                                  ),
+                                ));
+                              }
+                            },
+                      child: Text(
+                        _questionNumber < data!.questions.length
+                            ? 'Next'
+                            : 'Lihat Hasil',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ),
                   ],
                 ),
-        ),
+              ),
         appBar: PreferredSize(
           preferredSize:
               Size.fromHeight(MediaQuery.of(context).size.height * 0.2),
@@ -150,6 +195,8 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                   Provider.of<CameraProvider>(context,
                                           listen: false)
                                       .scaning = false;
+                               
+
                                   Navigator.of(context).pop();
                                 },
                                 child: Center(
@@ -224,148 +271,115 @@ class _HalamanSoalState extends State<HalamanSoal> {
             ),
           ),
         ),
-        body: Container(
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: PageView.builder(
-            controller: _controller,
-            physics: const NeverScrollableScrollPhysics(),
-            pageSnapping: false,
-            itemCount: data!.questions.length,
-            onPageChanged: (value) {
-              // setState(() {
-              _questionNumber = value + 1;
+        body: loading
+            ? Container(
+                color: Colors.white,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ))
+            : Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: PageView.builder(
+                  controller: _controller,
+                  physics: const NeverScrollableScrollPhysics(),
+                  pageSnapping: false,
+                  itemCount: data!.questions.length,
+                  onPageChanged: (value) {
+                    // setState(() {
+                    _questionNumber = value + 1;
 
-              // });
-            },
-            itemBuilder: (context, index) {
-              final WidgetQuestion myquestions = data!.questions[index];
+                    // });
+                  },
+                  itemBuilder: (context, index) {
+                    final WidgetQuestion myquestions = data!.questions[index];
 
-              return ListView(padding: const EdgeInsets.all(8.0), children: [
-                //  HtmlWidget(myquestions.htmlText),
-                ...myquestions.text
-                    .map(
-                      (e) => e.contains("image/png") ? Base64Image(e) : Text(e),
-                    )
-                    .toList(),
-                const SizedBox(
-                  height: 25,
-                ),
-                ...myquestions.options.map((e) {
-                  var color = Colors.grey.shade200;
-
-                  var questionOption = e;
-                  String letters =
-                      optionsLetters[myquestions.options.indexOf(e)];
-
-                  return (questionOption.text!.isEmpty && letters == "E." ||
-                          questionOption.text!.isEmpty && letters == "D.")
-                      ? SizedBox()
-                      : InkWell(
-                          onTap: () {
-                            _selcteed = questionOption;
-                            setState(() {
-                              myquestions.selectedWiidgetOption =
-                                  questionOption;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1.3,
-                                  color: myquestions.selectedWiidgetOption ==
-                                          questionOption
-                                      ? Colors.green
-                                      : color),
-                              color: Colors.grey.shade100,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Center(
-                              child: Row(
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      "$letters",
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 4),
-                                      child: questionOption.text!.contains(
-                                              "data:image/png;base64,")
-                                          ? Base64Image(questionOption.text!)
-                                          : Text(
-                                              questionOption.text!,
-                                            ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                    return ListView(
+                        padding: const EdgeInsets.all(8.0),
+                        children: [
+                          //  HtmlWidget(myquestions.htmlText),
+                          ...myquestions.text
+                              .map(
+                                (e) => e.contains("image/png")
+                                    ? Base64Image(e)
+                                    : Text(e,style: TextStyle(fontSize: 16),),
+                              )
+                              .toList(),
+                          const SizedBox(
+                            height: 25,
                           ),
-                        );
-                }).toList(),
-              ]);
-            },
-          ),
-        ),
-      ),
-    );
-  }
+                          ...myquestions.options.map((e) {
+                            var color = Colors.grey.shade200;
 
-  ElevatedButton buildElevatedButton(WiidgetOption? e) {
-    //  const Color bgColor3 = Color(0xFF5170FD);
+                            var questionOption = e;
+                            String letters =
+                                optionsLetters[myquestions.options.indexOf(e)];
 
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(_questionNumber < data!.questions.length
-                ? e == null
-                    ? Colors.grey
-                    : Theme.of(context).primaryColor
-                : Colors.green),
-        fixedSize: MaterialStateProperty.all(
-          Size(MediaQuery.sizeOf(context).width * 0.40, 40),
-        ),
-        elevation: MaterialStateProperty.all(4),
-      ),
-      onPressed: e == null
-          ? null
-          : () {
-              if (_questionNumber < data!.questions.length) {
-                _controller.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-                setState(() {
-                  _questionNumber++;
-                });
-              } else {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HalamanPDFSoalState(
-                      data!,
-                      data!.namaBab,
-                    ),
-                  ),
-                );
-              }
-            },
-      child: Text(
-        _questionNumber < data!.questions.length ? 'Next' : 'Lihat Hasil',
-        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+                            return (questionOption.text!.isEmpty &&
+                                        letters == "E." ||
+                                    questionOption.text!.isEmpty &&
+                                        letters == "D.")
+                                ? SizedBox()
+                                : InkWell(
+                                    onTap: () {
+                                      _selcteed = questionOption;
+                                      setState(() {
+                                        myquestions.selectedWiidgetOption =
+                                            questionOption;
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1.3,
+                                            color: myquestions
+                                                        .selectedWiidgetOption ==
+                                                    questionOption
+                                                ? Colors.green
+                                                : color),
+                                        color: Colors.grey.shade100,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      child: Center(
+                                        child: Row(
+                                          // crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.topCenter,
+                                              child: Text(
+                                                "$letters",
+                                                style: const TextStyle(
+                                                    fontSize: 16),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10, right: 4),
+                                                child: questionOption.text!
+                                                        .contains(
+                                                            "data:image/png;base64,")
+                                                    ? Base64Image(
+                                                        questionOption.text!)
+                                                    : Text(
+                                                        questionOption.text!,style: TextStyle(fontSize: 16),
+                                                      ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                          }).toList(),
+                        ]);
+                  },
+                ),
+              ),
       ),
     );
   }
