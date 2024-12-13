@@ -80,7 +80,7 @@ class _HalamanWebviewState extends State<HalamanWebview>
               FadeTransition(
                 opacity: _animation2,
                 child: Image.asset(
-                  "asset/logo.png",
+                  "asset/ttj.png",
                   width: MediaQuery.of(context).size.width * 0.5,
                 ),
               ),

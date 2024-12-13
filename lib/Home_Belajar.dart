@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:Bupin/HalamanVideoGupin.dart';
+import 'package:Bupin/WebivewPolos.dart';
 import 'package:Bupin/styles/capital.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -174,6 +175,22 @@ class HalamanBelajar extends StatelessWidget {
                             ],
                           ),
                         ), InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => HalamanWebview("https://s.bupin.id/edukasi-gupin",
+                             ),
+                            ));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset("asset/tanjung.png")),
+                          ),
+                        ),
+                        
+                        InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => GupinVideo("4KEs7FhZWQw",

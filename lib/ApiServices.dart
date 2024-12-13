@@ -361,7 +361,7 @@ class ApiService {
     final response = await dio.get(
       "https://bupin.id/api/api-tryout-new.php?kelas=${user!.kelas}&mapel=$idMapel&status=$status",
     );
-
+log( "https://bupin.id/api/api-tryout-new.php?kelas=${user!.kelas}&mapel=$idMapel&status=$status");
     if (response.data == null) {
       return [];
     } else {
