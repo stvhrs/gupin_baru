@@ -1,19 +1,48 @@
-import 'dart:convert';
 import 'dart:developer';
 
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
 class CameraProvider extends ChangeNotifier {
-bool scanned=false;
+  late bool scanned;
 
-set scaning(val){
-  scanned=val;
-  log("notify");
-  notifyListeners();
-}
+  QRViewController? controller;
+  bool flased = false;
+  @override
+  dispose() {
+    controller?.dispose();
+    flased = false;
+  }
+
+  set scaning(val) {
+    scanned = val;
+    log("scanning");
+  }
+
+  set setCon(val) {
+    controller = val;
+    log("set");
+    notifyListeners();
+  }
+
+  setflash() {
+    flased = !flased;
+    controller?.toggleFlash();
+    log("flash");
+    notifyListeners();
+  }
+
+  pause() {
+    controller!.pauseCamera();
+    log("akti pause2");
+  }
+
+  resume() {
+    controller!.resumeCamera();
+    log("akti resume2");
+    notifyListeners();
+    
+  }
 }
 
  

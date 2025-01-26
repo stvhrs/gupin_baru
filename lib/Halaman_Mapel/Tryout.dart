@@ -14,10 +14,8 @@ import 'package:timeline_tile/timeline_tile.dart';
 class TryoutItem extends StatefulWidget {
   final String judul;
   final Color color;
-  final List<dynamic> questionlenght;
-
-  final dynamic optionsList;
-  TryoutItem(this.judul, this.color, this.questionlenght, this.optionsList);
+final String link;
+  TryoutItem(this.judul, this.color, this.link );
 
   @override
   State<TryoutItem> createState() => _TryoutItemState();
@@ -41,9 +39,7 @@ class _TryoutItemState extends State<TryoutItem> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => QuizScreen(
                     color: widget.color,
-                    questionlenght: widget.questionlenght,
-                    optionsList: widget.optionsList,
-                    topicType: widget.judul),
+                     link: widget.link,),
               ));
             },
             child: Container(

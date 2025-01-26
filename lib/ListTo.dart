@@ -100,7 +100,7 @@ class _ListToState extends State<ListTo> {
                     .getToDetail(tryoutku[index].idmapel!, widget.ptsorpas),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return TryoutItem("", widget.color, [], []);
+                    return TryoutItem("", widget.color,'');
                   } else {
                     Map<dynamic, dynamic> randomQuestionsMap =
                         getRandomQuestionsAndOptions(
@@ -110,7 +110,7 @@ class _ListToState extends State<ListTo> {
                         randomQuestionsMap.keys.toList();
                     dynamic randomOptions = randomQuestionsMap.values.toList();
                     return TryoutItem(tryoutku[index].namaMapel!, widget.color,
-                        randomQuestions, randomOptions);
+                     "https://cbt.api.bupin.id/api/mapel/${tryoutku[index].idmapel!}?level=${tryoutku[index].idmapel!}&noscan=true");
                   }
                 }),
           ),

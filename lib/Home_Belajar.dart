@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
-
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/Halaman_Login.dart';
 import 'package:Bupin/Halman_Mapel.dart';
@@ -69,7 +68,8 @@ class IconMapel extends StatelessWidget {
               ),
             ),
           ),
-          Text(textAlign: TextAlign.center,
+          Text(
+            textAlign: TextAlign.center,
             judul,
             maxLines: 1,
             overflow: TextOverflow.visible,
@@ -84,7 +84,7 @@ class IconMapel extends StatelessWidget {
 }
 
 class HalamanBelajar extends StatelessWidget {
-    Future<void> _launchInBrowser(Uri url) async {
+  Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
       url,
       mode: LaunchMode.externalApplication,
@@ -108,29 +108,32 @@ class HalamanBelajar extends StatelessWidget {
                 return [HomAppBar()];
               },
               body: Stack(
-                children: [Container(
-                                margin: EdgeInsets.only(
-                                    top: MediaQuery.of(context).padding.top *
-                                        1.5),
-                                decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 237, 240, 247),
-                                    borderRadius: 
-                                    BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15))),
-                
-                                    
-                              
-                                width: MediaQuery.of(context).size.width,
-                              ),
-                              Positioned.fill(child: Image.asset("asset/Halaman_Scan/Doodle Halaman Scan@4x.png",repeat: ImageRepeat.repeatY,color: Theme.of(context).primaryColor,)),
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).padding.top * 1.5),
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 237, 240, 247),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15))),
+                    width: MediaQuery.of(context).size.width,
+                  ),
+                  Positioned.fill(
+                      child: Image.asset(
+                    "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
+                    repeat: ImageRepeat.repeatY,
+                    color: Theme.of(context).primaryColor,
+                  )),
                   Container(
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                       ),
                       child: ListView(padding: EdgeInsets.zero, children: [
                         Card(
-                          margin: EdgeInsets.only(left: 6,right: 6,bottom: 10),elevation: 2,
+                          margin:
+                              EdgeInsets.only(left: 6, right: 6, bottom: 10),
+                          elevation: 2,
                           color: Colors.white,
                           surfaceTintColor: Colors.white,
                           child: Column(
@@ -139,7 +142,7 @@ class HalamanBelajar extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: Text(
-                                  "Pelajaran "+ ApiService.user!.jenjang,
+                                  "Pelajaran " + ApiService.user!.jenjang,
                                   style: TextStyle(
                                       fontWeight: FontWeight.w900,
                                       fontSize: 15,
@@ -174,11 +177,13 @@ class HalamanBelajar extends StatelessWidget {
                                       ))),
                             ],
                           ),
-                        ), InkWell(
+                        ),
+                        InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => HalamanWebview("https://s.bupin.id/edukasi-gupin",
-                             ),
+                              builder: (context) => HalamanWebview(
+                                "https://s.bupin.id/edukasi-gupin",
+                              ),
                             ));
                           },
                           child: Padding(
@@ -189,11 +194,11 @@ class HalamanBelajar extends StatelessWidget {
                                 child: Image.asset("asset/tanjung.png")),
                           ),
                         ),
-                        
                         InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => GupinVideo("4KEs7FhZWQw",
+                              builder: (context) => GupinVideo(
+                                  "4KEs7FhZWQw",
                                   "https://www.youtube.com/watch?v=4KEs7FhZWQw",
                                   Theme.of(context).primaryColor,
                                   "Product Knowledge Gupin"),
@@ -220,7 +225,6 @@ class HalamanBelajar extends StatelessWidget {
                                 child: Image.asset("asset/beli.png")),
                           ),
                         ),
-                       
                       ])),
                 ],
               )),
@@ -278,7 +282,8 @@ class HomAppBar extends StatelessWidget {
             top = constraints.biggest.height;
             log(top.toString());
             return FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(bottom: 5, left: 10,right: 10),
+              titlePadding:
+                  const EdgeInsets.only(bottom: 5, left: 10, right: 10),
               title: AnimatedOpacity(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -304,10 +309,10 @@ class HomAppBar extends StatelessWidget {
                   ],
                 ),
                 duration: const Duration(milliseconds: 200),
-                opacity: top <=
-                        MediaQuery.of(context).padding.top + kToolbarHeight 
-                    ? 1.0
-                    : 0.0,
+                opacity:
+                    top <= MediaQuery.of(context).padding.top + kToolbarHeight
+                        ? 1.0
+                        : 0.0,
               ),
               background: Container(
                 child: OverflowBox(

@@ -20,191 +20,204 @@ class QRViewExample extends StatefulWidget {
 }
 
 class _QRViewExampleState extends State<QRViewExample> {
+  @override
+  void initState() {
+    if (mounted) {
+      NetworkInfo.checkConnectivity(context);
+    }
+    log("init");
+    Provider.of<CameraProvider>(context, listen: false).scaning = false;
+
+    super.initState();
+  }
+
   late bool scanned;
   Barcode? result;
-  QRViewController? controller;
-
   @override
   void dispose() {
-    controller?.dispose();
-
+    // if (mounted) {
+    //   Provider.of<CameraProvider>(context, listen: false).dispose();
+    // }
     super.dispose();
   }
+
+  // @override
+  // didChangeDependencies() {
+  //   log("didchange");
+  //   Provider.of<CameraProvider>(context, listen: false).scaning = false;
+  //   log(Provider.of<CameraProvider>(context, listen: false).scanned.toString() +
+  //       "now");
+  //   if (Provider.of<CameraProvider>(context, listen: false).controller !=
+  //           null &&
+  //       Provider.of<CameraProvider>(context, listen: false).scanned == false) {
+  //     Provider.of<CameraProvider>(context, listen: false).resume();
+  //   }
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
     var scanArea = (MediaQuery.of(context).size.height < 400)
-        ? MediaQuery.of(context).size.width / 2
-        : MediaQuery.of(context).size.width / 2;
+        ? MediaQuery.of(context).size.width / 1.3
+        : MediaQuery.of(context).size.width / 1.3;
     return Consumer<CameraProvider>(builder: (context, data, x) {
-      log("consumer");
-      if (controller != null && data.scanned == false) {
-        controller!.resumeCamera();
-      }
+      // log("consumer");
+      // if (data.controller != null && data.scanned == false) {
+      //   data.controller!.resumeCamera();
+      // }
 
-      return SafeArea(
-        child: Scaffold(
-          body: Column(
-            children: <Widget>[
-              Expanded(
-                  flex: 3,
-                  child: Stack(
-                    alignment: Alignment.center,
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Stack(
+                    alignment: Alignment.topCenter,
                     children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          QRView(
-                            key: qrKey,
-                            onQRViewCreated: (controller2) {
-                              controller = controller2;
-                              controller2!.scannedDataStream.listen(
-                                (scanData) async {
-                                  log(scanData.code.toString());
-                                  if (data.scanned == false) {
-                                    if (scanData.code!.contains("VID")) {
-                                      controller2.pauseCamera();
+                      QRView(
+                        key: qrKey,
+                        onQRViewCreated: (controller2) {
+                          data.setCon = controller2;
+                          data.controller?.scannedDataStream.listen(
+                            (scanData) async {
+                              log(scanData.code.toString());
+                              if (data.scanned == false) {
+                                if (scanData.code!.contains("VID")) {
+                                  data.pause();
+                                  data.scaning = true;
 
-                                      data.scaning = true;
+                                  ApiService()
+                                      .pushToVideo(scanData.code!, context);
+                                } else if (scanData.code!.contains("UJN")) {
+                                  data.pause();
 
-                                      ApiService()
-                                          .pushToVideo(scanData.code!, context);
-                                    } else if (scanData.code!.contains("UJN")) {
-                                      controller2.pauseCamera();
+                                  data.scaning = true;
 
-                                      data.scaning = true;
-
-                                      ApiService()
-                                          .pushToCbt(scanData.code!, context);
-                                    }
-                                  }
-                                },
-                              );
+                                  ApiService()
+                                      .pushToCbt(scanData.code!, context);
+                                }
+                              }
                             },
-                            overlay: QrScannerOverlayShape(
-                                borderColor: Theme.of(context).primaryColor,
-                                borderRadius: 6,
-                                borderLength: 30,
-                                borderWidth: 10,
-                                cutOutSize: scanArea),
-                            onPermissionSet: (ctrl, p) =>
-                                _onPermissionSet(context, ctrl, p),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.7,
-                            height: MediaQuery.of(context).size.width / 1.7,
-                            child: const ScanningEffect(
-                              enableBorder: false,
-                              scanningColor: Colors.white,
-                              delay: Duration(seconds: 1),
-                              duration: Duration(seconds: 2),
-                              child: SizedBox(),
-                            ),
-                          ),
-                        ],
+                          );
+                        },
+                        overlay: QrScannerOverlayShape(
+                            overlayColor: Colors.black.withOpacity(0.7),
+                            borderColor: Colors.white,
+                            borderRadius: 12,
+                            borderLength: 144.4,
+                            borderWidth: 3,
+                            cutOutSize: scanArea),
+                        onPermissionSet: (ctrl, p) =>
+                            _onPermissionSet(context, ctrl, p),
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 1.7,
-                        height: MediaQuery.of(context).size.width / 1.7,
-                        child: const ScanningEffect(
-                          enableBorder: false,
-                          scanningColor: Color.fromRGBO(236, 180, 84, 1),
-                          delay: Duration(seconds: 1),
-                          duration: Duration(seconds: 2),
-                          child: SizedBox(),
-                        ),
-                      ),
-                    ],
-                  )),
-              Expanded(
-                flex: 2,
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.fitWidth,
-                      repeat: ImageRepeat.repeat,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      child: IconButton.filled(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white)),
-                          color: Colors.white,
-                          highlightColor: Colors.grey,
-                          onPressed: () {
-                            Navigator.pop(context, false);
-                          },
-                          icon: Icon(
-                            Icons.arrow_back_rounded,
-                            color: Theme.of(context).primaryColor,
-                          )),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                      Column(
                         children: [
-                          Expanded(
-                            flex: 6,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 0),
-                              child: Stack(
-                                alignment: Alignment.bottomLeft,
+                          Container(
+                            margin: const EdgeInsets.only(
+                                top: 48, bottom: 16, left: 16, right: 16),
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Spacer(
-                                        flex: 2,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 16),
-                                        child: Text(
-                                          "Scan",
-                                          style: TextStyle(
-                                              fontSize: 40,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w900),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 16),
-                                        child: Text(
-                                          "Akses Video & Soal",
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              color: Color.fromRGBO(
-                                                  236, 180, 84, 1),
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ),
-                                      Spacer(
-                                        flex: 4,
-                                      ),
-                                    ],
+                                  IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      icon: const Icon(
+                                        Icons.arrow_back_rounded,
+                                        color: Colors.white,
+                                      )),
+                                  const Text(
+                                    "Scan Qr",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.white),
                                   ),
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.arrow_back_rounded,
+                                        color: Colors.transparent,
+                                      )),
                                 ],
                               ),
                             ),
                           ),
-                          Expanded(
-                              flex: 8,
-                              child: Image.asset(
-                                "asset/Halaman_Scan/Hasan Scan2.png",
-                                scale: 0.7,
-                              )),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 26.0),
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 26.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.25),
+                              borderRadius: BorderRadius.circular(6.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                    flex: 1,
+                                    child: Image.asset(
+                                      "asset/Points.png",
+                                      width: 20,
+                                      color: Colors.white,
+                                    )),
+                                const Flexible(
+                                  flex: 6,
+                                  child: Text(
+                                    'Scan QR di buku belajar Bupin dan dapatkan 100 points!',
+                                    style: TextStyle(
+                                      color: Colors.white, // Text color
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          const Spacer(),
+                          const Spacer(),
+                          const Spacer(),
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.white,
+                            child: IconButton(
+                              onPressed: () {
+                                data.setflash();
+                              },
+                              icon: Icon(data.flased
+                                  ? IconsaxPlusBold.flash_1
+                                  : IconsaxPlusLinear.flash_1),
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          const Spacer(),
                         ],
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+
+                  // SizedBox(
+                  //   width: MediaQuery.of(context).size.width / 1.2,
+                  //   height: MediaQuery.of(context).size.width / 1.2,
+                  //   child:  ScannerAnimation(
+                  //   false,
+                  //    MediaQuery.of(context).size.width / 1.2,,
+                  //   animation: _animationController as Animation<double>,
+                  // ),
+                  // ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     });
@@ -218,6 +231,54 @@ void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
   if (!p) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('no Permission')),
+    );
+  }
+}
+
+class ScannerAnimation extends AnimatedWidget {
+  final bool stopped;
+  final double width;
+
+  const ScannerAnimation(
+    this.stopped,
+    this.width, {
+    super.key,
+    required Animation<double> animation,
+  }) : super(
+          listenable: animation,
+        );
+
+  @override
+  Widget build(BuildContext context) {
+    final Animation<double> animation = listenable as Animation<double>;
+    final scorePosition = (animation.value * 440) + 16;
+
+    Color color1 = Color(0x5532CD32);
+    Color color2 = Color(0x0032CD32);
+
+    if (animation.status == AnimationStatus.reverse) {
+      color1 = Color(0x0032CD32);
+      color2 = Color(0x5532CD32);
+    }
+
+    return Positioned(
+      bottom: scorePosition,
+      left: 16.0,
+      child: Opacity(
+        opacity: (stopped) ? 0.0 : 1.0,
+        child: Container(
+          height: 60.0,
+          width: width,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.1, 0.9],
+              colors: [color1, color2],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

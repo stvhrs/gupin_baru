@@ -165,7 +165,8 @@ class ApiService {
     log(scanResult);
      Navigator.of(context).push(CustomRoute(
       builder: (context) => HalamanSoal(
-        link: scanResult,
+        link: scanResult, color: Color.fromARGB(255, 48, 47, 114),
+            
       ),
     ));
     return;
@@ -333,7 +334,7 @@ class ApiService {
       return [];
     } else {
       List<Video> tempListMapel = [];
-
+  
       for (Map<String, dynamic> element in response.data) {
         if (!tempListMapel
             .map((e) => e.linkVideo)
